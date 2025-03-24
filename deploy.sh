@@ -21,4 +21,4 @@ TMPDIR=/var/tmp pip install -r requirements.txt
 # - To reattach to the screen: screen -r vibesearch
 # - To list all screens: screen -ls
 # - To kill the screen: screen -X -S vibesearch quit
-screen -dmS vibesearch python3 run.py 
+screen -dmS vibesearch bash -c 'source venv/bin/activate && python3 run.py' 
