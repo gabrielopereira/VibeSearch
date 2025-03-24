@@ -1,4 +1,4 @@
 flask==3.0.2
-chromadb==0.4.24
+chromadb==0.6.3
 sentence-transformers==2.5.1
 waitress==3.0.0 
