@@ -4,10 +4,7 @@
 sudo apt update && sudo apt upgrade -y
 
 # Install Python and pip if not already installed
-sudo apt install -y python3 python3-pip
-
-# Install virtualenv
-sudo pip3 install virtualenv
+sudo apt install -y python3-full python3.12-venv
 
 # Create and activate virtual environment
 python3 -m venv venv
@@ -17,4 +14,4 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Start the application
-python run.py 
+python3 run.py 
