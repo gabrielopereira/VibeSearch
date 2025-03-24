@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🔮 VibeSearch</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="split-container">
+        <div class="search-side">
+            <div class="title-container">
+                <h1><a href="{{ url_for('index') }}" class="title-link"><span class="emoji">🔮</span> VibeSearch</a></h1>
+                <a href="{{ url_for('about') }}" class="about-link">About</a>
+            </div>
+            <div class="search-container">
+                <form class="search-form" method="post">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="search_query" class="search-input" placeholder="Search for..." value="{{ search_query }}">
+                    </div>
+                    <div class="select-wrapper">
+                        <i class="fas fa-list-ol select-icon"></i>
+                        <select name="num_results" class="results-count">
+                            <option value="5" {% if num_results == 5 %}selected{% endif %}>5</option>
+                            <option value="10" {% if num_results == 10 %}selected{% endif %}>10</option>
+                            <option value="20" {% if num_results == 20 %}selected{% endif %}>20</option>
+                            <option value="50" {% if num_results == 50 %}selected{% endif %}>50</option>
+                        </select>
+                    </div>
+                    <div class="select-wrapper">
+                        <i class="fas fa-filter select-icon"></i>
+                        <select name="search_type" class="search-type">
+                            <option value="semantic" {% if search_type == "semantic" %}selected{% endif %}>Vibe</option>
+                            <option value="traditional" {% if search_type == "traditional" %}selected{% endif %}>Relevance</option>
+                            <option value="keyword" {% if search_type == "keyword" %}selected{% endif %}>Keyword</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            {% if results %}
+                <div class="results-container">
+                    {% if search_type == "traditional" and results.total_matches is defined %}
+                        <div class="total-matches">
+                            Found {{ results.total_matches }} matches
+                        </div>
+                    {% endif %}
+                    {% for i in range(results['ids'][0]|length) %}
+                        <div class="result-card">
+                            <h2 class="result-title">
+                                <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="paper-preview">
+                                    {{ results['metadatas'][0][i]['title'] }}
+                                </a>
+                                {% if results['distances'] and results['distances'][0][i] > 0 %}
+                                    <span class="relevance">Relevance: {{ (1 - results['distances'][0][i])|round(2) }}</span>
+                                {% endif %}
+                            </h2>
+                            <div class="result-meta">
+                                {% if results['metadatas'][0][i]['authors'] %}
+                                    <div><strong>Authors:</strong> {{ results['metadatas'][0][i]['authors'] }}</div>
+                                {% endif %}
+                                {% if results['metadatas'][0][i]['year'] %}
+                                    <div><strong>Year:</strong> {{ results['metadatas'][0][i]['year'] }}</div>
+                                {% endif %}
+                                {% if results['metadatas'][0][i]['journal'] %}
+                                    <div><strong>Journal:</strong> {{ results['metadatas'][0][i]['journal'] }}</div>
+                                {% endif %}
+                                {% if results['metadatas'][0][i]['doi'] %}
+                                    <div class="doi-container">
+                                        <strong>DOI:</strong> 
+                                        <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="paper-preview">{{ results['metadatas'][0][i]['doi'] }}</a>
+                                        <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="_blank" class="external-link" title="Open in new tab">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if results['metadatas'][0][i]['abstract'] %}
+                                <div class="result-abstract">
+                                    <strong>Abstract:</strong> 
+                                    {{ results['metadatas'][0][i]['abstract'][:300] }}{% if results['metadatas'][0][i]['abstract']|length > 300 %}...{% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% elif search_query %}
+                <div class="no-results">No results found for "{{ search_query }}"</div>
+            {% endif %}
+        </div>
+        <div class="preview-side">
+            <iframe id="paper-preview" name="paper-preview" src="{{ url_for('static', filename='preview.html') }}"></iframe>
+        </div>
+    </div>
+</body>
+</html> 

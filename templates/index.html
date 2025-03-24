@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Academic Paper Search</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .search-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .results-count {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 80px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-button:hover {
+            background-color: #357ae8;
+        }
+        .results-container {
+            display: grid;
+            gap: 20px;
+        }
+        .result-card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .result-title {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #1a0dab;
+        }
+        .result-title a {
+            text-decoration: none;
+            color: #1a0dab;
+        }
+        .result-title a:hover {
+            text-decoration: underline;
+        }
+        .result-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .result-abstract {
+            margin-top: 10px;
+            color: #444;
+        }
+        .no-results {
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            text-align: center;
+            color: #666;
+        }
+        .relevance {
+            display: inline-block;
+            padding: 3px 6px;
+            background-color: #e6f4ea;
+            color: #137333;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Academic Paper Search</h1>
+    <div class="search-container">
+        <form class="search-form" method="post">
+            <input type="text" name="search_query" class="search-input" placeholder="Search for papers..." value="{{ search_query }}">
+            <select name="num_results" class="results-count">
+                <option value="5" {% if num_results == 5 %}selected{% endif %}>5</option>
+                <option value="10" {% if num_results == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if num_results == 20 %}selected{% endif %}>20</option>
+                <option value="50" {% if num_results == 50 %}selected{% endif %}>50</option>
+            </select>
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
+
+    {% if results %}
+        <div class="results-container">
+            {% for i in range(results['ids'][0]|length) %}
+                <div class="result-card">
+                    <h2 class="result-title">
+                        <a href="{{ url_for('paper_detail', paper_id=results['ids'][0][i]) }}">
+                            {{ results['metadatas'][0][i]['title'] }}
+                        </a>
+                        {% if results['distances'] %}
+                            <span class="relevance">Relevance: {{ (1 - results['distances'][0][i])|round(2) }}</span>
+                        {% endif %}
+                    </h2>
+                    <div class="result-meta">
+                        {% if results['metadatas'][0][i]['authors'] %}
+                            <div><strong>Authors:</strong> {{ results['metadatas'][0][i]['authors'] }}</div>
+                        {% endif %}
+                        {% if results['metadatas'][0][i]['year'] %}
+                            <div><strong>Year:</strong> {{ results['metadatas'][0][i]['year'] }}</div>
+                        {% endif %}
+                        {% if results['metadatas'][0][i]['journal'] %}
+                            <div><strong>Journal:</strong> {{ results['metadatas'][0][i]['journal'] }}</div>
+                        {% endif %}
+                        {% if results['metadatas'][0][i]['doi'] %}
+                            <div><strong>DOI:</strong> {{ results['metadatas'][0][i]['doi'] }}</div>
+                        {% endif %}
+                    </div>
+                    {% if results['metadatas'][0][i]['abstract'] %}
+                        <div class="result-abstract">
+                            <strong>Abstract:</strong> 
+                            {{ results['metadatas'][0][i]['abstract'][:300] }}{% if results['metadatas'][0][i]['abstract']|length > 300 %}...{% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% elif search_query %}
+        <div class="no-results">No results found for "{{ search_query }}"</div>
+    {% endif %}
+</body>
+</html>
+        
