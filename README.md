@@ -1,6 +1,7 @@
+@ -1,107 +0,0 @@
 # VibeSearch
 
-A Flask application for searching academic papers using ChromaDB, supporting both semantic and traditional keyword-based search.
+A Flask application for searching academic papers using ChromaDB, supporting both semantic and traditional/keyword-based search.
 
 ## Features
 
