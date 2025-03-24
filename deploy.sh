@@ -10,14 +10,8 @@ sudo apt install -y python3-full python3.12-venv build-essential python3-dev
 python3 -m venv venv
 source venv/bin/activate
 
-# Install PyTorch and ChromaDB separately with TMPDIR setting to avoid memory issues
-TMPDIR=/var/tmp pip install torch
-TMPDIR=/var/tmp pip install chromadb==0.6.3
-
-# Install remaining requirements
-pip install sentence-transformers==2.5.1
-pip install flask==3.0.2
-pip install waitress==3.0.0
+# Install all requirements with TMPDIR setting to avoid disk space issues
+TMPDIR=/var/tmp pip install -r requirements.txt
 
 # Start the application
 python3 run.py 
