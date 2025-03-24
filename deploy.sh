@@ -10,7 +10,10 @@ sudo apt install -y python3-full python3.12-venv
 python3 -m venv venv
 source venv/bin/activate
 
-# Install requirements
+# Install PyTorch separately with TMPDIR setting to avoid memory issues
+TMPDIR=/var/tmp pip install torch
+
+# Install other requirements
 pip install -r requirements.txt
 
 # Start the application
