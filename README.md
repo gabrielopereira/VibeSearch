@@ -1,7 +1,7 @@
 @ -1,107 +0,0 @@
 # VibeSearch
 
-A Flask application for searching academic papers using ChromaDB, supporting both semantic and traditional/keyword-based search.
+A Flask application for searching academic papers using ChromaDB, supporting both semantic and traditional/keyword-based search. The database is built using Crossref data from selected journals, with vector search word embeddings created through ChromaDB.
 
 ## Features
 
@@ -10,6 +10,15 @@ A Flask application for searching academic papers using ChromaDB, supporting bot
 - Paper preview functionality
 - Responsive design
 - Support for multiple search result counts
+
+## Data Source
+
+- Data collected through Crossref API from selected academic journals
+- Vector search word embeddings created using ChromaDB
+- Note: Crossref data availability may vary:
+  - Some articles may not have abstracts
+  - Abstract availability depends on journal policies and time periods
+  - Not all journals have year of the pub in CrossRef?
 
 ## Installation
 
