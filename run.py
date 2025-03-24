@@ -11,4 +11,4 @@ if __name__ == '__main__':
         '/etc/letsencrypt/live/vibesearch.latentspaces.online/fullchain.pem',
         '/etc/letsencrypt/live/vibesearch.latentspaces.online/privkey.pem'
     )
-    serve(app, host='0.0.0.0', port=443, url_scheme='https', _ssl_context=ssl_context) 
+    serve(app, host='0.0.0.0', port=443, url_scheme='https', ssl_context=ssl_context) 
