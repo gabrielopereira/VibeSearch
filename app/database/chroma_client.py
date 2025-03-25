@@ -45,41 +45,24 @@ class ChromaClient:
             return results
             
         elif search_type == "keyword":
-            # Get all documents
-            all_docs = self.collection.get()
+            # Use ChromaDB's built-in SQLite FTS5 support for exact keyword matching
+            results = self.collection.query(
+                query_texts=[query],
+                n_results=num_results,
+                where_document={
+                    "$or": [
+                        {"$contains": query},
+                        {"$contains": query.lower()}
+                    ]
+                }
+            )
             
-            # Simple keyword matching
-            query = query.lower()
-            matches = []
+            # Clean the metadata
+            results['metadatas'] = [[self.clean_metadata(m) for m in results['metadatas'][0]]]
+            results['total_matches'] = len(results['ids'][0])
+            return results
             
-            for i, metadata in enumerate(all_docs['metadatas']):
-                # Clean the metadata for searching
-                cleaned_metadata = self.clean_metadata(metadata)
-                title = cleaned_metadata.get('title', '').lower()
-                abstract = cleaned_metadata.get('abstract', '').lower()
-                
-                # Check if query matches anywhere
-                if query in title or query in abstract:
-                    matches.append({
-                        'id': all_docs['ids'][i],
-                        'metadata': cleaned_metadata,
-                        'distance': 0.0  # Simple keyword search doesn't have distances
-                    })
-            
-            # Take only the requested number of results
-            matches = matches[:num_results]
-            
-            # Format results to match the semantic search structure
-            return {
-                'ids': [[m['id'] for m in matches]],
-                'metadatas': [[m['metadata'] for m in matches]],
-                'distances': [[m['distance'] for m in matches]],
-                'total_matches': len(matches)
-            }
         else:  # traditional search
-            # Get all documents
-            all_docs = self.collection.get()
-            
             # Split query into words and remove common words
             query_words = [word.lower() for word in query.split() 
                          if word.lower() not in {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'}]
@@ -87,10 +70,24 @@ class ChromaClient:
             if not query_words:  # If all words were filtered out
                 query_words = [word.lower() for word in query.split()]
             
-            matches = []
+            # Build a complex query using FTS5 for initial filtering
+            where_conditions = []
+            for word in query_words:
+                where_conditions.append({"$contains": word})
+                where_conditions.append({"$contains": word.upper()})
             
-            for i, metadata in enumerate(all_docs['metadatas']):
-                # Clean the metadata for searching
+            # Use FTS5 for initial filtering
+            initial_results = self.collection.query(
+                query_texts=[query],
+                n_results=num_results * 2,  # Get more results than needed for ranking
+                where_document={
+                    "$or": where_conditions
+                }
+            )
+            
+            # Apply our ranking system to the filtered results
+            matches = []
+            for i, metadata in enumerate(initial_results['metadatas'][0]):
                 cleaned_metadata = self.clean_metadata(metadata)
                 title = cleaned_metadata.get('title', '').lower()
                 abstract = cleaned_metadata.get('abstract', '').lower()
@@ -114,7 +111,7 @@ class ChromaClient:
                     relevance_score = base_score + title_bonus + all_words_bonus
                     
                     matches.append({
-                        'id': all_docs['ids'][i],
+                        'id': initial_results['ids'][0][i],
                         'metadata': cleaned_metadata,
                         'distance': 1 - (relevance_score / (len(query_words) * 3)),  # Normalize distance
                         'match_score': relevance_score

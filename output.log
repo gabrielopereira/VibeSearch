@@ -165,3 +165,7 @@
 2025-03-25 22:12:09,950 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
 2025-03-25 22:12:11,570 [INFO] Starting server on http://127.0.0.1:8080
 2025-03-25 22:12:11,570 [INFO] Serving on http://127.0.0.1:8080
+2025-03-25 23:03:01,722 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 23:03:04,692 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 23:03:06,797 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 23:03:06,798 [INFO] Serving on http://127.0.0.1:8080

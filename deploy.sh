@@ -36,6 +36,12 @@ startretries=3
 stopwaitsecs=10
 killasgroup=true
 stopasgroup=true
+
+# Memory management
+minfds=1024                     ; minimum file descriptors
+minprocs=200                    ; minimum process descriptors
+memcheck_interval=60            ; check every minute
+memcheck_max=800MB             ; restart if memory exceeds 800MB
 EOL
 
 # Move Supervisor config to correct location
@@ -64,7 +70,7 @@ sudo supervisorctl start vibesearch
 
 # Wait a moment and check if the process is running
 sleep 2
-if sudo supervisorctl status vibesearch | grep -q "RUNNING"; then
+if sudo supervisorctl status vibesearch | grep -q "RUNNING\|already started"; then
     echo "✅ Application started successfully!"
     echo "📝 Logs are being written to output.log"
     echo "🔄 Auto-restart is enabled. If the application crashes, it will automatically restart."
