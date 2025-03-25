@@ -169,3 +169,18 @@
 2025-03-25 23:03:04,692 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
 2025-03-25 23:03:06,797 [INFO] Starting server on http://127.0.0.1:8080
 2025-03-25 23:03:06,798 [INFO] Serving on http://127.0.0.1:8080
+2025-03-25 23:11:35,269 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 23:11:38,266 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 23:11:39,802 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 23:11:39,802 [INFO] Serving on http://127.0.0.1:8080
+2025-03-25 23:17:39,032 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 23:17:41,649 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 23:17:43,265 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 23:17:48,166 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 23:17:49,954 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 23:17:52,090 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 23:17:52,091 [INFO] Serving on http://127.0.0.1:8080
+2025-03-25 23:18:49,664 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 23:18:52,338 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 23:18:54,110 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 23:18:54,112 [INFO] Serving on http://127.0.0.1:8080

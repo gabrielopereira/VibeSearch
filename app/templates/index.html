@@ -103,39 +103,9 @@
     </div>
 
     <script>
-        const searchType = document.getElementById('search-type');
-        const numResults = document.getElementById('num-results');
         const searchButton = document.getElementById('search-button');
         const searchIcon = searchButton.querySelector('.fa-search');
         const spinnerIcon = searchButton.querySelector('.fa-spinner');
-        
-        function updateNumResultsOptions() {
-            const isVibeSearch = searchType.value === 'semantic';
-            const options = numResults.options;
-            
-            // Store current value
-            const currentValue = numResults.value;
-            
-            // Update options based on search type
-            for (let option of options) {
-                if ((option.value === '50' || option.value === '20') && !isVibeSearch) {
-                    option.style.display = 'none';
-                } else {
-                    option.style.display = '';
-                }
-            }
-            
-            // If current value is 20 or 50 and not vibe search, set to 10
-            if ((currentValue === '50' || currentValue === '20') && !isVibeSearch) {
-                numResults.value = '10';
-            }
-        }
-        
-        // Run on page load
-        updateNumResultsOptions();
-        
-        // Run when search type changes
-        searchType.addEventListener('change', updateNumResultsOptions);
         
         // Handle form submission
         document.querySelector('.search-form').addEventListener('submit', function() {
