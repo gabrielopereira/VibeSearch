@@ -429,4 +429,56 @@ h1 {
 
 .journal-table tr.total-row td:last-child {
     color: #2c3e50;
+}
+
+.search-types {
+    margin-top: 2rem;
+}
+
+.search-type-item {
+    background: rgba(167, 84, 159, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(167, 84, 159, 0.1);
+}
+
+.search-type-item h4 {
+    margin-top: 0;
+    color: #a7549f;
+    font-size: 1.2rem;
+}
+
+.search-type-item p {
+    margin-bottom: 1rem;
+    color: #444;
+}
+
+.search-type-item ul {
+    list-style-type: none;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.search-type-item li {
+    position: relative;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.search-type-item li:before {
+    content: "✨";
+    position: absolute;
+    left: -1.5rem;
+    color: #a7549f;
+}
+
+.search-type-item a {
+    color: #a7549f;
+    text-decoration: none;
+    border-bottom: 1px dotted #a7549f;
+}
+
+.search-type-item a:hover {
+    border-bottom-style: solid;
 } 
