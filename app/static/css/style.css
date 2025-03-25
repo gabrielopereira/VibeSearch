@@ -524,4 +524,63 @@ h1 {
 .catchphrase:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(155, 109, 255, 0.3);
+}
+
+.screen-size-warning {
+    display: none;
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.screen-size-warning i {
+    margin-right: 8px;
+    color: #856404;
+}
+
+@media (max-width: 600px) {
+    .screen-size-warning {
+        display: block;
+    }
+    
+    .container, .about-container {
+        padding: 10px;
+    }
+    
+    .search-form {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .search-input-wrapper,
+    .select-wrapper,
+    .search-type,
+    .results-count {
+        width: 100%;
+    }
+    
+    .search-button {
+        width: 100%;
+    }
+    
+    .result-card {
+        padding: 10px;
+    }
+    
+    .result-title {
+        font-size: 0.9rem;
+    }
+    
+    .result-meta {
+        font-size: 0.9rem;
+    }
+    
+    .result-abstract {
+        font-size: 0.9rem;
+    }
 } 
