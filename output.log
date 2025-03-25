@@ -1,0 +1,22 @@
+2025-03-25 03:15:43,833 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 03:15:46,881 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 03:15:48,754 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 03:16:22,501 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 03:16:24,859 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 03:16:26,289 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 03:16:26,290 [INFO] Serving on http://127.0.0.1:8080
+2025-03-25 03:18:51,632 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 03:18:54,278 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 03:18:55,715 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 03:19:01,696 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 03:19:03,884 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 03:19:05,302 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 03:19:05,303 [INFO] Serving on http://127.0.0.1:8080
+2025-03-25 03:19:55,622 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 03:19:58,253 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 03:19:59,887 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 03:19:59,888 [INFO] Serving on http://127.0.0.1:8080
+2025-03-25 03:23:23,516 [INFO] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-03-25 03:23:26,273 [INFO] Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-03-25 03:23:27,889 [INFO] Starting server on http://127.0.0.1:8080
+2025-03-25 03:23:27,890 [INFO] Serving on http://127.0.0.1:8080

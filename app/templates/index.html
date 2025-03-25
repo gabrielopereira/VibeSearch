@@ -57,7 +57,13 @@
                                     {{ results['metadatas'][0][i]['title'] }}
                                 </a>
                                 {% if results['distances'] and results['distances'][0][i] > 0 %}
-                                    <span class="relevance">Relevance: {{ (1 - results['distances'][0][i])|round(2) }}</span>
+                                    <span class="badge">Relevance: {{ (1 - results['distances'][0][i])|round(2) }}</span>
+                                    <form method="post" style="display: inline;">
+                                        <input type="hidden" name="search_query" value="{{ results['metadatas'][0][i]['title'] }}">
+                                        <input type="hidden" name="num_results" value="{{ num_results }}">
+                                        <input type="hidden" name="search_type" value="semantic">
+                                        <button type="submit" class="badge badge-similar">✨ Similar</button>
+                                    </form>
                                 {% endif %}
                             </h2>
                             <div class="result-meta">

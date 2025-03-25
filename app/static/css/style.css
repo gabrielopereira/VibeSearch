@@ -429,4 +429,49 @@ h1 {
 
 .journal-table tr.total-row td:last-child {
     color: #2c3e50;
+}
+
+.similar-button {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: #fff3bf;
+    color: #856404;
+    border: none;
+    border-radius: 3px;
+    font-size: 1rem;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.similar-button:hover {
+    background-color: #ffeeba;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* Green badge for relevance */
+.badge {
+    background-color: #e6f4ea;
+    color: #137333;
+}
+
+/* Yellow badge for similar button */
+.badge-similar {
+    background-color: #fff3bf;
+    color: #856404;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.badge-similar:hover {
+    background-color: #ffeeba;
 } 
