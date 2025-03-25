@@ -10,7 +10,7 @@ def init_routes(app):
     def index():
         search_query = ''
         results = None
-        num_results = 10
+        num_results = 50
         search_type = "semantic"
 
         if request.method == 'POST':

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>🔮 VibeSearch</title>
+    <title>VibeSearch</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🔮</text></svg>">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="split-container">
+    <div class="container">
         <div class="search-side">
             <div class="title-container">
                 <h1><a href="{{ url_for('index') }}" class="title-link"><span class="emoji">🔮</span> VibeSearch</a></h1>
@@ -22,7 +23,7 @@
                     </div>
                     <div class="select-wrapper">
                         <i class="fas fa-list-ol select-icon"></i>
-                        <select name="num_results" class="results-count">
+                        <select name="num_results" class="results-count" id="num-results">
                             <option value="5" {% if num_results == 5 %}selected{% endif %}>5</option>
                             <option value="10" {% if num_results == 10 %}selected{% endif %}>10</option>
                             <option value="20" {% if num_results == 20 %}selected{% endif %}>20</option>
@@ -31,14 +32,15 @@
                     </div>
                     <div class="select-wrapper">
                         <i class="fas fa-filter select-icon"></i>
-                        <select name="search_type" class="search-type">
+                        <select name="search_type" class="search-type" id="search-type">
                             <option value="semantic" {% if search_type == "semantic" %}selected{% endif %}>Vibe</option>
                             <option value="traditional" {% if search_type == "traditional" %}selected{% endif %}>Relevance</option>
                             <option value="keyword" {% if search_type == "keyword" %}selected{% endif %}>Keyword</option>
                         </select>
                     </div>
-                    <button type="submit" class="search-button">
+                    <button type="submit" class="search-button" id="search-button">
                         <i class="fas fa-search"></i>
+                        <i class="fas fa-spinner fa-spin" style="display: none;"></i>
                     </button>
                 </form>
             </div>
@@ -53,7 +55,7 @@
                     {% for i in range(results['ids'][0]|length) %}
                         <div class="result-card">
                             <h2 class="result-title">
-                                <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="paper-preview">
+                                <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="_blank">
                                     {{ results['metadatas'][0][i]['title'] }}
                                 </a>
                                 {% if results['distances'] and results['distances'][0][i] > 0 %}
@@ -79,17 +81,16 @@
                                 {% if results['metadatas'][0][i]['doi'] %}
                                     <div class="doi-container">
                                         <strong>DOI:</strong> 
-                                        <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="paper-preview">{{ results['metadatas'][0][i]['doi'] }}</a>
-                                        <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="_blank" class="external-link" title="Open in new tab">
-                                            <i class="fas fa-external-link-alt"></i>
+                                        <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="_blank">{{ results['metadatas'][0][i]['doi'] }}
                                         </a>
                                     </div>
                                 {% endif %}
                             </div>
                             {% if results['metadatas'][0][i]['abstract'] %}
-                                <div class="result-abstract">
+                                <div class="result-abstract" onclick="this.classList.toggle('expanded')">
                                     <strong>Abstract:</strong> 
-                                    {{ results['metadatas'][0][i]['abstract'][:300] }}{% if results['metadatas'][0][i]['abstract']|length > 300 %}...{% endif %}
+                                    <span class="abstract-text">{{ results['metadatas'][0][i]['abstract'] }}</span>
+                                    <span class="expand-indicator">Expand <i class="fas fa-chevron-down"></i></span>
                                 </div>
                             {% endif %}
                         </div>
@@ -99,9 +100,48 @@
                 <div class="no-results">No results found for "{{ search_query }}"</div>
             {% endif %}
         </div>
-        <div class="preview-side">
-            <iframe id="paper-preview" name="paper-preview" src="{{ url_for('static', filename='preview.html') }}"></iframe>
-        </div>
     </div>
+
+    <script>
+        const searchType = document.getElementById('search-type');
+        const numResults = document.getElementById('num-results');
+        const searchButton = document.getElementById('search-button');
+        const searchIcon = searchButton.querySelector('.fa-search');
+        const spinnerIcon = searchButton.querySelector('.fa-spinner');
+        
+        function updateNumResultsOptions() {
+            const isVibeSearch = searchType.value === 'semantic';
+            const options = numResults.options;
+            
+            // Store current value
+            const currentValue = numResults.value;
+            
+            // Update options based on search type
+            for (let option of options) {
+                if ((option.value === '50' || option.value === '20') && !isVibeSearch) {
+                    option.style.display = 'none';
+                } else {
+                    option.style.display = '';
+                }
+            }
+            
+            // If current value is 20 or 50 and not vibe search, set to 10
+            if ((currentValue === '50' || currentValue === '20') && !isVibeSearch) {
+                numResults.value = '10';
+            }
+        }
+        
+        // Run on page load
+        updateNumResultsOptions();
+        
+        // Run when search type changes
+        searchType.addEventListener('change', updateNumResultsOptions);
+        
+        // Handle form submission
+        document.querySelector('.search-form').addEventListener('submit', function() {
+            searchIcon.style.display = 'none';
+            spinnerIcon.style.display = 'inline-block';
+        });
+    </script>
 </body>
 </html> 
