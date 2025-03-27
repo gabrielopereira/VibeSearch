@@ -9,7 +9,7 @@ class ChromaClient:
     def __init__(self, db_path="chroma_db"):
         self.client = chromadb.PersistentClient(path=db_path)
         self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name="all-MiniLM-L6-v2"
+            model_name="Snowflake/snowflake-arctic-embed-s"
         )
         self.collection = self.client.get_collection(
             name="academic_papers",
@@ -36,12 +36,17 @@ class ChromaClient:
 
     def search_papers(self, query, num_results=10, search_type="semantic"):
         if search_type == "semantic":
+            # Add prefix for model that needs it
+            query = "Represent this sentence for searching relevant passages: " + query
             results = self.collection.query(
                 query_texts=[query],
                 n_results=num_results
             )
             # Clean the metadata
             results['metadatas'] = [[self.clean_metadata(m) for m in results['metadatas'][0]]]
+            # Invert distances so higher means better match
+            if results['distances']:
+                results['distances'] = [[1 - d for d in results['distances'][0]]]
             return results
             
         elif search_type == "keyword":
@@ -113,7 +118,7 @@ class ChromaClient:
                     matches.append({
                         'id': initial_results['ids'][0][i],
                         'metadata': cleaned_metadata,
-                        'distance': 1 - (relevance_score / (len(query_words) * 3)),  # Normalize distance
+                        'distance': relevance_score,  # Just use the raw score
                         'match_score': relevance_score
                     })
             

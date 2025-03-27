@@ -62,8 +62,8 @@
                                 <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="_blank">
                                     {{ results['metadatas'][0][i]['title'] }}
                                 </a>
-                                {% if results['distances'] and results['distances'][0][i] > 0 %}
-                                    <span class="badge">Relevance: {{ (1 - results['distances'][0][i])|round(2) }}</span>
+                                {% if results['distances'] %}
+                                    <span class="badge">Relevance: {{ results['distances'][0][i]|round(2) }}</span>
                                     <form method="post" style="display: inline;">
                                         <input type="hidden" name="search_query" value="{{ results['metadatas'][0][i]['title'] }}">
                                         <input type="hidden" name="num_results" value="{{ num_results }}">
