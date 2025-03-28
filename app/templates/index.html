@@ -85,8 +85,8 @@
                                 {% if results['metadatas'][0][i]['doi'] %}
                                     <div class="doi-container">
                                         <strong>DOI:</strong> 
-                                        <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="_blank">{{ results['metadatas'][0][i]['doi'] }}
-                                        </a>
+                                        <a href="https://doi.org/{{ results['metadatas'][0][i]['doi'] }}" target="_blank">{{ results['metadatas'][0][i]['doi'] }}</a>
+                                        <a href="https://libkey.io/{{ results['metadatas'][0][i]['doi'] }}" target="_blank" class="libkey-button">Full Text on Libkey</a>
                                     </div>
                                 {% endif %}
                             </div>

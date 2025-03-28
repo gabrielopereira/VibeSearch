@@ -294,9 +294,10 @@ h1 {
 }
 
 .doi-container {
+    margin-top: 5px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .external-link {
@@ -583,4 +584,19 @@ h1 {
     .result-abstract {
         font-size: 0.9rem;
     }
+}
+
+.libkey-button {
+    background-color: #a7549f;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease;
+    line-height: 1.2;
+}
+
+.libkey-button:hover {
+    background-color: #8a437f;
 } 
