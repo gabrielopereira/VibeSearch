@@ -1,14 +1,14 @@
-# VibeSearch
+# VibeSearch 🔍
 
-A simple application for searching academic papers using ChromaDB, supporting both semantic and traditional/keyword-based search. The database is built using Crossref data from selected journals, with vector search word embeddings created through ChromaDB (see [VibeCollector](https://github.com/gabrielopereira/VibeCollector)).
+A vibe-y search engine for academic papers! It uses both semantic (vector) and traditional keyword-based search to help you find relevant articles. The database is built from selected New Media journals using Crossref data, with vector embeddings powered by ChromaDB (check out [VibeCollector](https://github.com/gabrielopereira/VibeCollector) to build your own database! ✨).
 
-## Features
+## Features 🌟
 
-- Semantic search using ChromaDB
-- Traditional keyword-based search
-- You can also host this app using the in-built Waitress server
+- Semantic search using ChromaDB's magic ✨
+- Traditional keyword-based search for when you know exactly what you want 🎯
+- Host it yourself using the built-in Waitress server 🍽️
 
-## Installation
+## Quick Start 🚀
 
 1. Create and activate a virtual environment:
 ```bash
@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 3. If you want, replace the `chroma_db` folder with your own database created using VibeCollector.
 
-## Running the Application
+## Running the Application 🧠
 
 ### Local Development
 
@@ -40,20 +40,27 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-## Search Types
+## Search Types 🔎
 
-### Semantic Search
-- Uses ChromaDB's semantic search capabilities with Snowflake/snowflake-arctic-embed-s model
+### Semantic Search ✨
+- Uses ChromaDB's semantic search capabilities with Snowflake/snowflake-arctic-embed-s model 
 - Finds papers based on "meaning" rather than exact keyword matches
 - Results are sorted by semantic similarity using cosine distance
 - Embeddings are generated using sentence transformers and stored in ChromaDB
 
-### Traditional Search
-- Performs keyword-based search in titles and abstracts
+### Traditional Search 🎯
+- Performs keyword-based search in titles and abstracts 
 - Uses weighted scoring: title matches have 2x weight compared to abstract matches
 - Implements case-insensitive substring matching
 - Results are sorted by combined weighted score
 
-## License
+
+### Note on the Data 📊
+  
+- Some articles may not have abstracts 
+- Abstract availability depends on journal policies and time periods
+- Not all journals have year of the pub in CrossRef 
+
+## License 📄
 
 Just do whatever, it's just vibes.
