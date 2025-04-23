@@ -1,4 +1,4 @@
-# VibeSearch 🔍
+# 🔮 VibeSearch
 
 A vibe-y search engine for academic papers! It uses both semantic (vector) and traditional keyword-based search to help you find relevant articles. The database is built from selected New Media journals using Crossref data, with vector embeddings powered by ChromaDB (check out [VibeCollector](https://github.com/gabrielopereira/VibeCollector) to build your own database! ✨).
 
