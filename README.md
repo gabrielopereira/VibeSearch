@@ -1,6 +1,10 @@
 # VibeSearch
 
+<<<<<<< HEAD
 A simple application for searching academic papers using ChromaDB, supporting both semantic and traditional/keyword-based search. The database is built using Crossref data from selected journals, with vector search word embeddings created through ChromaDB (see (VibeCollector)[https://github.com/gabrielopereira/VibeCollector]).
+=======
+A simple application for searching academic papers using ChromaDB, supporting both semantic and traditional/keyword-based search. The database is built using Crossref data from selected journals, with vector search word embeddings created through ChromaDB (see [VibeCollector]([url](https://github.com/gabrielopereira/VibeCollector))).
+>>>>>>> 6a6bebc4b2221ba90ec3f5a0344552483bc7dbf8
 
 ## Features
 
