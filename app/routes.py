@@ -31,6 +31,31 @@ def init_routes(app):
                              num_results=num_results,
                              search_type=search_type)
 
+    @app.route('/twopane', methods=['GET', 'POST'])
+    def twopane():
+        search_query = ''
+        results = None
+        num_results = 50
+        search_type = "semantic"
+
+        if request.method == 'POST':
+            search_query = request.form.get('search_query', '')
+            num_results = int(request.form.get('num_results', 10))
+            search_type = request.form.get('search_type', "semantic")
+            
+            if search_query:
+                results = chroma_client.search_papers(
+                    search_query,
+                    num_results=num_results,
+                    search_type=search_type
+                )
+
+        return render_template('twopane.html',
+                             search_query=search_query,
+                             results=results,
+                             num_results=num_results,
+                             search_type=search_type)
+
     @app.route('/about')
     def about():
         # Read the journal summary data

@@ -1,43 +1,34 @@
-@ -1,107 +0,0 @@
 # VibeSearch
 
-A Flask application for searching academic papers using ChromaDB, supporting both semantic and traditional/keyword-based search. The database is built using Crossref data from selected journals, with vector search word embeddings created through ChromaDB.
+A simple application for searching academic papers using ChromaDB, supporting both semantic and traditional/keyword-based search. The database is built using Crossref data from selected journals, with vector search word embeddings created through ChromaDB (see VibeCollector).
 
 ## Features
 
 - Semantic search using ChromaDB
 - Traditional keyword-based search
-- Paper preview functionality
-- Responsive design
-- Support for multiple search result counts
+- You can also host this app using the in-built Waitress server
 
 ## Data Source
 
 - Data collected through Crossref API from selected academic journals
 - Vector search word embeddings created using ChromaDB
 - Note: Crossref data availability may vary:
-  - Some articles may not have abstracts
-  - Abstract availability depends on journal policies and time periods
-  - Not all journals have year of the pub in CrossRef?
+
 
 ## Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd VibeSearch
-```
-
-2. Create and activate a virtual environment:
+1. Create and activate a virtual environment:
 ```bash
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-3. Install dependencies:
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+3. If you want, replace the `chroma_db` folder with your own database created using VibeCollector.
 
 ## Running the Application
 
@@ -48,7 +39,7 @@ To run the application locally:
 python run.py
 ```
 
-### Production Deployment
+### Hosting your own deployment (e.g. on DigitalOcean)
 
 The application can be deployed using the provided `deploy.sh` script:
 ```bash
@@ -56,61 +47,26 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### Managing the Application with Screen
+## Dependencies
 
-The application runs in a screen session named 'vibesearch' for persistent execution. Here's how to manage it:
-
-1. **View Running Sessions**
-   ```bash
-   screen -ls
-   ```
-
-2. **Attach to the Session**
-   ```bash
-   screen -r vibesearch
-   ```
-
-3. **Detach from the Session**
-   - Press `Ctrl+A`, then `D`
-   - The application will continue running in the background
-
-4. **Kill the Session** (if needed)
-   ```bash
-   screen -X -S vibesearch quit
-   ```
-
-## Project Structure
-
-```
-VibeSearch/
-├── app/
-│   ├── database/
-│   │   └── chroma_client.py
-│   ├── routes.py
-│   ├── static/
-│   │   └── css/
-│   │       └── style.css
-│   └── templates/
-│       ├── index.html
-│       └── paper_detail.html
-├── chroma_db/
-├── requirements.txt
-├── run.py
-└── deploy.sh
-```
+- Flask 3.0.2 - Web framework
+- ChromaDB 0.6.3 - Vector database for semantic search
+- Sentence-Transformers 2.5.1 - For creating embeddings
+- Waitress 3.0.0 - Production WSGI server
 
 ## Search Types
 
 ### Semantic Search
-- Uses ChromaDB's semantic search capabilities
-- Finds papers based on meaning rather than exact keyword matches
-- Results are sorted by semantic similarity
+- Uses ChromaDB's semantic search capabilities with Snowflake/snowflake-arctic-embed-s model
+- Finds papers based on "meaning" rather than exact keyword matches
+- Results are sorted by semantic similarity using cosine distance
+- Embeddings are generated using sentence transformers and stored in ChromaDB
 
 ### Traditional Search
 - Performs keyword-based search in titles and abstracts
-- Prioritizes matches in titles over abstract matches
-- Shows total number of matches found
-
+- Uses weighted scoring: title matches have 2x weight compared to abstract matches
+- Implements case-insensitive substring matching
+- Results are sorted by combined weighted score
 
 ## License
 
