@@ -19,7 +19,7 @@ A simple application for searching academic papers using ChromaDB, supporting bo
 
 1. Create and activate a virtual environment:
 ```bash
-python3 -m venv venv
+python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
