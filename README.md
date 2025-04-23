@@ -8,13 +8,6 @@ A simple application for searching academic papers using ChromaDB, supporting bo
 - Traditional keyword-based search
 - You can also host this app using the in-built Waitress server
 
-## Data Source
-
-- Data collected through Crossref API from selected academic journals
-- Vector search word embeddings created using ChromaDB
-- Note: Crossref data availability may vary:
-
-
 ## Installation
 
 1. Create and activate a virtual environment:
@@ -46,13 +39,6 @@ The application can be deployed using the provided `deploy.sh` script:
 chmod +x deploy.sh
 ./deploy.sh
 ```
-
-## Dependencies
-
-- Flask 3.0.2 - Web framework
-- ChromaDB 0.6.3 - Vector database for semantic search
-- Sentence-Transformers 2.5.1 - For creating embeddings
-- Waitress 3.0.0 - Production WSGI server
 
 ## Search Types
 
