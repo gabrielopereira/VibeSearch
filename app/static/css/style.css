@@ -649,4 +649,118 @@ h1 {
     padding: 2px 6px;
     background-color: #f0f0f0;
     border-radius: 3px;
+}
+
+/* Histogram Styles */
+.histogram-container {
+    margin: 5px 0;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.98);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(167, 84, 159, 0.15);
+}
+
+.histogram-header {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.histogram-title {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+#year-histogram {
+    width: 100%;
+    height: 200px !important;
+    max-height: 200px !important;
+}
+
+/* Responsive adjustments for histogram */
+@media (max-width: 600px) {
+    .histogram-container {
+        padding: 10px;
+        margin: 10px 0;
+    }
+    
+    .histogram-title {
+        font-size: 0.8rem;
+    }
+    
+    #year-histogram {
+        height: 180px;
+    }
+}
+
+/* Results Header and Timeline Toggle */
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.timeline-toggle {
+    background-color: #f8f9fa;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.timeline-toggle:hover {
+    background-color: #e9ecef;
+    border-color: #a7549f;
+    color: #a7549f;
+}
+
+.timeline-toggle.active {
+    background-color: #a7549f;
+    color: white;
+    border-color: #a7549f;
+}
+
+.timeline-toggle.active:hover {
+    background-color: #8a437f;
+    border-color: #8a437f;
+}
+
+.show-all-button {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    border: 1px solid #1a73e8;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.show-all-button:hover {
+    background-color: #1a73e8;
+    color: white;
+}
+
+/* Responsive adjustments for timeline toggle */
+@media (max-width: 600px) {
+    .results-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .timeline-toggle {
+        align-self: flex-start;
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
 } 

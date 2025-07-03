@@ -2,9 +2,47 @@ from flask import Flask, render_template, request, url_for
 from app.database.chroma_client import ChromaClient
 import json
 import os
+from collections import Counter
 
 def init_routes(app):
     chroma_client = ChromaClient()
+
+    def generate_year_histogram_data(results):
+        """Generate histogram data from search results"""
+        if not results or not results.get('metadatas') or not results['metadatas'][0]:
+            return None
+        
+        # Extract years from metadata
+        years = []
+        for metadata in results['metadatas'][0]:
+            if metadata.get('year'):
+                try:
+                    year = int(metadata['year'])
+                    if 1900 <= year <= 2030:  # Reasonable year range
+                        years.append(year)
+                except (ValueError, TypeError):
+                    continue
+        
+        if not years:
+            return None
+        
+        # Count publications per year
+        year_counts = Counter(years)
+        
+        # Get the full year range
+        min_year = min(years)
+        max_year = max(years)
+        
+        # Fill in missing years with zero values
+        all_years = list(range(min_year, max_year + 1))
+        all_counts = [year_counts.get(year, 0) for year in all_years]
+        
+        return {
+            'years': all_years,
+            'counts': all_counts,
+            'total_papers': len(years),
+            'year_range': f"{min_year} - {max_year}"
+        }
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
@@ -12,6 +50,7 @@ def init_routes(app):
         results = None
         num_results = 50
         search_type = "semantic"
+        histogram_data = None
 
         if request.method == 'POST':
             search_query = request.form.get('search_query', '')
@@ -24,12 +63,15 @@ def init_routes(app):
                     num_results=num_results,
                     search_type=search_type
                 )
+                # Generate histogram data
+                histogram_data = generate_year_histogram_data(results)
 
         return render_template('index.html',
                              search_query=search_query,
                              results=results,
                              num_results=num_results,
-                             search_type=search_type)
+                             search_type=search_type,
+                             histogram_data=histogram_data)
 
     @app.route('/twopane', methods=['GET', 'POST'])
     def twopane():
@@ -37,6 +79,7 @@ def init_routes(app):
         results = None
         num_results = 50
         search_type = "semantic"
+        histogram_data = None
 
         if request.method == 'POST':
             search_query = request.form.get('search_query', '')
@@ -49,12 +92,15 @@ def init_routes(app):
                     num_results=num_results,
                     search_type=search_type
                 )
+                # Generate histogram data
+                histogram_data = generate_year_histogram_data(results)
 
         return render_template('twopane.html',
                              search_query=search_query,
                              results=results,
                              num_results=num_results,
-                             search_type=search_type)
+                             search_type=search_type,
+                             histogram_data=histogram_data)
 
     @app.route('/about')
     def about():
