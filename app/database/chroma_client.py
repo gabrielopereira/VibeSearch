@@ -7,7 +7,12 @@ import re
 
 class ChromaClient:
     def __init__(self, db_path="chroma_db"):
-        self.client = chromadb.PersistentClient(path=db_path)
+        # Configure ChromaDB with memory management settings for 1GB RAM server
+        settings = Settings(
+            chroma_segment_cache_policy="LRU",
+            chroma_memory_limit_bytes=700000000  # ~700MB limit (leaving ~500MB for system/other processes)
+        )
+        self.client = chromadb.PersistentClient(path=db_path, settings=settings)
         self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name="Snowflake/snowflake-arctic-embed-s"
         )
