@@ -54,6 +54,15 @@ chmod +x deploy.sh
 - Implements case-insensitive substring matching
 - Results are sorted by combined weighted score
 
+## Version History 📚
+
+### Version 1.1 - Timelines and Journals 📊
+
+- **📊 Timeline**: Histogram showing publication years. Click bars to filter by year.
+- **📝 Journals**: Half-Doughnut chart showing top 10 journals. Click segments to filter by journal.
+- **Toggle**: Only one visualization visible at a time. Switching resets filters.
+- **Session memory**: Remembers which visualization was last shown.
+
 
 ### Note on the Data 📊
   

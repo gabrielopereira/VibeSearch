@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/histogram.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/journal_histogram.js') }}"></script>
 </head>
 <body>
     <div class="container two-pane">
@@ -66,11 +67,18 @@
                                 Found {{ results.total_matches }} matches
                             </div>
                         {% endif %}
-                        {% if histogram_data %}
-                            <button id="timeline-toggle" class="timeline-toggle" onclick="toggleTimeline()">
-                                📊 Timeline
-                            </button>
-                        {% endif %}
+                        <div class="button-group">
+                            {% if histogram_data %}
+                                <button id="timeline-toggle" class="timeline-toggle" onclick="toggleTimeline()">
+                                    📊 Timeline
+                                </button>
+                            {% endif %}
+                            {% if journal_data %}
+                                <button id="journal-toggle" class="timeline-toggle" onclick="toggleJournal()">
+                                    📝 Journals
+                                </button>
+                            {% endif %}
+                        </div>
                     </div>
                     
                     {% if histogram_data %}
@@ -79,6 +87,15 @@
                                 <span class="histogram-title">Publication Years ({{ histogram_data.total_papers }} papers, {{ histogram_data.year_range }})</span>
                             </div>
                             <canvas id="year-histogram" data-histogram='{{ histogram_data | tojson }}'></canvas>
+                        </div>
+                    {% endif %}
+                    
+                    {% if journal_data %}
+                        <div id="journal-container" class="histogram-container" style="display: none;">
+                            <div class="histogram-header">
+                                <span class="histogram-title">Top 10 Journals ({{ journal_data.total_papers }} papers from {{ journal_data.total_journals }} journals)</span>
+                            </div>
+                            <canvas id="journal-histogram" data-journal='{{ journal_data | tojson }}'></canvas>
                         </div>
                     {% endif %}
 
@@ -176,16 +193,34 @@
             renderHistogram(histogramData);
         }
 
+        // Render journal histogram if data is available
+        const journalElement = document.getElementById('journal-histogram');
+        if (journalElement && journalElement.dataset.journal) {
+            const journalData = JSON.parse(journalElement.dataset.journal);
+            renderJournalHistogram(journalData);
+        }
+
         // Timeline toggle functionality with session memory
         function toggleTimeline() {
             const histogramContainer = document.getElementById('histogram-container');
-            const toggleButton = document.getElementById('timeline-toggle');
+            const journalContainer = document.getElementById('journal-container');
+            const timelineButton = document.getElementById('timeline-toggle');
+            const journalButton = document.getElementById('journal-toggle');
+            
+            // Reset any active filtering first
+            if (typeof showAllYearResults === 'function') showAllYearResults();
+            if (typeof showAllResults === 'function') showAllResults();
             
             if (histogramContainer.style.display === 'none') {
+                // Show timeline, hide journal
                 histogramContainer.style.display = 'block';
-                toggleButton.textContent = '📊 Timeline';
-                toggleButton.classList.add('active');
+                journalContainer.style.display = 'none';
+                
+                timelineButton.classList.add('active');
+                journalButton.classList.remove('active');
+                
                 sessionStorage.setItem('timelineVisible', 'true');
+                sessionStorage.setItem('journalVisible', 'false');
                 
                 // Re-render histogram when showing (in case it was hidden during initial load)
                 const histogramElement = document.getElementById('year-histogram');
@@ -194,10 +229,46 @@
                     renderHistogram(histogramData);
                 }
             } else {
+                // Hide timeline
                 histogramContainer.style.display = 'none';
-                toggleButton.textContent = '📊 Timeline';
-                toggleButton.classList.remove('active');
+                timelineButton.classList.remove('active');
                 sessionStorage.setItem('timelineVisible', 'false');
+            }
+        }
+
+        // Journal toggle functionality with session memory
+        function toggleJournal() {
+            const histogramContainer = document.getElementById('histogram-container');
+            const journalContainer = document.getElementById('journal-container');
+            const journalButton = document.getElementById('journal-toggle');
+            const timelineButton = document.getElementById('timeline-toggle');
+            
+            // Reset any active filtering first
+            if (typeof showAllYearResults === 'function') showAllYearResults();
+            if (typeof showAllResults === 'function') showAllResults();
+            
+            if (journalContainer.style.display === 'none') {
+                // Show journal, hide timeline
+                journalContainer.style.display = 'block';
+                histogramContainer.style.display = 'none';
+                
+                journalButton.classList.add('active');
+                timelineButton.classList.remove('active');
+                
+                sessionStorage.setItem('journalVisible', 'true');
+                sessionStorage.setItem('timelineVisible', 'false');
+                
+                // Re-render journal histogram when showing (in case it was hidden during initial load)
+                const journalElement = document.getElementById('journal-histogram');
+                if (journalElement && journalElement.dataset.journal) {
+                    const journalData = JSON.parse(journalElement.dataset.journal);
+                    renderJournalHistogram(journalData);
+                }
+            } else {
+                // Hide journal
+                journalContainer.style.display = 'none';
+                journalButton.classList.remove('active');
+                sessionStorage.setItem('journalVisible', 'false');
             }
         }
 
@@ -216,6 +287,22 @@
                 if (histogramElement && histogramElement.dataset.histogram) {
                     const histogramData = JSON.parse(histogramElement.dataset.histogram);
                     renderHistogram(histogramData);
+                }
+            }
+            
+            const journalVisible = sessionStorage.getItem('journalVisible');
+            const journalContainer = document.getElementById('journal-container');
+            const journalToggleButton = document.getElementById('journal-toggle');
+            
+            if (journalVisible === 'true' && journalContainer && journalToggleButton) {
+                journalContainer.style.display = 'block';
+                journalToggleButton.classList.add('active');
+                
+                // Render journal histogram if it should be visible
+                const journalElement = document.getElementById('journal-histogram');
+                if (journalElement && journalElement.dataset.journal) {
+                    const journalData = JSON.parse(journalElement.dataset.journal);
+                    renderJournalHistogram(journalData);
                 }
             }
         });

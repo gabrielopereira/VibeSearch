@@ -105,7 +105,8 @@ function handleYearSelection(selectedYear, pointIndex) {
     // If clicking the same year, deselect it
     if (window.currentlySelectedYear === selectedYear) {
         console.log('Deselecting year:', selectedYear);
-        showAllResults();
+        console.log('showAllYearResults function exists:', typeof showAllYearResults);
+        showAllYearResults();
         return;
     }
     
@@ -171,7 +172,7 @@ function showShowAllButton(selectedYear, visibleCount) {
         showAllButton = document.createElement('button');
         showAllButton.id = 'show-all-button';
         showAllButton.className = 'show-all-button';
-        showAllButton.onclick = showAllResults;
+        showAllButton.onclick = showAllYearResults;
         
         // Insert after the results header
         const resultsHeader = document.querySelector('.results-header');
@@ -185,29 +186,47 @@ function showShowAllButton(selectedYear, visibleCount) {
 }
 
 // Show all results
-function showAllResults() {
+function showAllYearResults() {
+    console.log('showAllYearResults called');
+    
     const resultCards = document.querySelectorAll('.result-card');
     resultCards.forEach(card => {
         card.style.display = 'block';
     });
     
-    // Reset bar colors to original
+    // Reset year bar colors to original
     resetBarColors();
     
-    // Reset selected year
+    // Reset journal bar colors to original (if function exists)
+    if (typeof resetJournalBarColors === 'function') {
+        resetJournalBarColors();
+    }
+    
+    // Reset selected year and journal
     window.currentlySelectedYear = null;
+    window.currentlySelectedJournal = null;
     
     // Hide the "Show All" button
     const showAllButton = document.getElementById('show-all-button');
     if (showAllButton) {
         showAllButton.style.display = 'none';
     }
+    
+    console.log('showAllYearResults complete');
 }
 
 // Reset bar colors to original
 function resetBarColors() {
+    console.log('resetBarColors called');
+    console.log('window.yearChart exists:', !!window.yearChart);
+    console.log('window.originalBarColors exists:', !!window.originalBarColors);
+    
     if (window.yearChart && window.originalBarColors) {
-        window.yearChart.data.datasets[0].backgroundColor = window.originalBarColors;
-        window.yearChart.update();
+        console.log('Resetting colors to:', window.originalBarColors);
+        window.yearChart.data.datasets[0].backgroundColor = [...window.originalBarColors];
+        window.yearChart.update('none'); // Force immediate update
+        console.log('Colors reset complete');
+    } else {
+        console.log('Cannot reset colors - missing chart or original colors');
     }
 } 

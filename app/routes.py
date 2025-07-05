@@ -44,6 +44,39 @@ def init_routes(app):
             'year_range': f"{min_year} - {max_year}"
         }
 
+    def generate_journal_histogram_data(results):
+        """Generate journal histogram data from search results"""
+        if not results or not results.get('metadatas') or not results['metadatas'][0]:
+            return None
+        
+        # Extract journals from metadata
+        journals = []
+        for metadata in results['metadatas'][0]:
+            if metadata.get('journal'):
+                journal = metadata['journal'].strip()
+                if journal:  # Only include non-empty journal names
+                    journals.append(journal)
+        
+        if not journals:
+            return None
+        
+        # Count publications per journal
+        journal_counts = Counter(journals)
+        
+        # Sort by count (descending) and take top 10 journals
+        sorted_journals = sorted(journal_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+        
+        # Separate journals and counts
+        journal_names = [item[0] for item in sorted_journals]
+        journal_counts_list = [item[1] for item in sorted_journals]
+        
+        return {
+            'journals': journal_names,
+            'counts': journal_counts_list,
+            'total_papers': len(journals),
+            'total_journals': len(journal_counts)
+        }
+
     @app.route('/', methods=['GET', 'POST'])
     def index():
         search_query = ''
@@ -51,6 +84,7 @@ def init_routes(app):
         num_results = 50
         search_type = "semantic"
         histogram_data = None
+        journal_data = None
 
         if request.method == 'POST':
             search_query = request.form.get('search_query', '')
@@ -65,13 +99,15 @@ def init_routes(app):
                 )
                 # Generate histogram data
                 histogram_data = generate_year_histogram_data(results)
+                journal_data = generate_journal_histogram_data(results)
 
         return render_template('index.html',
                              search_query=search_query,
                              results=results,
                              num_results=num_results,
                              search_type=search_type,
-                             histogram_data=histogram_data)
+                             histogram_data=histogram_data,
+                             journal_data=journal_data)
 
     @app.route('/twopane', methods=['GET', 'POST'])
     def twopane():
@@ -80,6 +116,7 @@ def init_routes(app):
         num_results = 50
         search_type = "semantic"
         histogram_data = None
+        journal_data = None
 
         if request.method == 'POST':
             search_query = request.form.get('search_query', '')
@@ -94,13 +131,15 @@ def init_routes(app):
                 )
                 # Generate histogram data
                 histogram_data = generate_year_histogram_data(results)
+                journal_data = generate_journal_histogram_data(results)
 
         return render_template('twopane.html',
                              search_query=search_query,
                              results=results,
                              num_results=num_results,
                              search_type=search_type,
-                             histogram_data=histogram_data)
+                             histogram_data=histogram_data,
+                             journal_data=journal_data)
 
     @app.route('/about')
     def about():

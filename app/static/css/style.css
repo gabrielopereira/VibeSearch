@@ -672,7 +672,7 @@ h1 {
     font-weight: 500;
 }
 
-#year-histogram {
+#year-histogram, #journal-histogram {
     width: 100%;
     height: 200px !important;
     max-height: 200px !important;
@@ -702,6 +702,16 @@ h1 {
     margin-bottom: 10px;
     flex-wrap: wrap;
     gap: 10px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.results-header .timeline-toggle {
+    margin-right: 0;
 }
 
 .timeline-toggle {
