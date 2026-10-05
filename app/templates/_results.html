@@ -1,0 +1,90 @@
+{# The results of a search. Shared by the main page and the demo page,
+   which also fetches it on its own to replace the results in place. #}
+{% from '_link.html' import outbound %}
+{% if results %}
+    <div class="results-container">
+        <div class="results-header">
+            {% if search_type == "traditional" and results.total_matches is defined %}
+                <div class="total-matches">
+                    Found {{ results.total_matches }} matches
+                </div>
+            {% endif %}
+            <div class="button-group">
+                {% if histogram_data %}
+                    <button id="timeline-toggle" class="timeline-toggle" onclick="toggleTimeline()">
+                        📊 Timeline
+                    </button>
+                {% endif %}
+                {% if journal_data %}
+                    <button id="journal-toggle" class="timeline-toggle" onclick="toggleJournal()">
+                        📝 Journals
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if histogram_data %}
+            <div id="histogram-container" class="histogram-container" style="display: none;">
+                <div class="histogram-header">
+                    <span class="histogram-title">Publication Years ({{ histogram_data.total_papers }} papers, {{ histogram_data.year_range }})</span>
+                </div>
+                <canvas id="year-histogram" data-histogram='{{ histogram_data | tojson }}'></canvas>
+            </div>
+        {% endif %}
+
+        {% if journal_data %}
+            <div id="journal-container" class="histogram-container" style="display: none;">
+                <div class="histogram-header">
+                    <span class="histogram-title">Top 10 Journals from the {{ journal_data.total_papers }} papers.</span>
+                </div>
+                <canvas id="journal-histogram" data-journal='{{ journal_data | tojson }}'></canvas>
+            </div>
+        {% endif %}
+
+        {% for i in range(results['ids'][0]|length) %}
+            <div class="result-card">
+                <h2 class="result-title">
+                    <a {{ outbound('https://doi.org/' ~ results['metadatas'][0][i]['doi'], demo) }}>
+                        {{ results['metadatas'][0][i]['title'] }}
+                    </a>
+                    {% if results['distances'] %}
+                        <span class="badge">Relevance: {{ results['distances'][0][i]|round(2) }}</span>
+                        <form method="post" style="display: inline;">
+                            <input type="hidden" name="search_query" value="{{ results['metadatas'][0][i]['title'] }}">
+                            <input type="hidden" name="num_results" value="{{ num_results }}">
+                            <input type="hidden" name="search_type" value="semantic">
+                            <button type="submit" class="badge badge-similar">✨ Find Similar</button>
+                        </form>
+                    {% endif %}
+                </h2>
+                <div class="result-meta">
+                    {% if results['metadatas'][0][i]['authors'] %}
+                        <div><strong>Authors:</strong> {{ results['metadatas'][0][i]['authors'] }}</div>
+                    {% endif %}
+                    {% if results['metadatas'][0][i]['year'] %}
+                        <div><strong>Year:</strong> {{ results['metadatas'][0][i]['year'] }}</div>
+                    {% endif %}
+                    {% if results['metadatas'][0][i]['journal'] %}
+                        <div><strong>Journal:</strong> {{ results['metadatas'][0][i]['journal'] }}</div>
+                    {% endif %}
+                    {% if results['metadatas'][0][i]['doi'] %}
+                        <div class="doi-container">
+                            <strong>DOI:</strong> 
+                            <a {{ outbound('https://doi.org/' ~ results['metadatas'][0][i]['doi'], demo) }}>{{ results['metadatas'][0][i]['doi'] }}</a>
+                            <a {{ outbound('https://libkey.io/' ~ results['metadatas'][0][i]['doi'], demo) }} class="libkey-button">Full Text on Libkey</a>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if results['metadatas'][0][i]['abstract'] %}
+                    <div class="result-abstract" onclick="this.classList.toggle('expanded')">
+                        <strong>Abstract:</strong> 
+                        <span class="abstract-text">{{ results['metadatas'][0][i]['abstract'] }}</span>
+                        <span class="expand-indicator">Expand <i class="fas fa-chevron-down"></i></span>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% elif search_query %}
+    <div class="no-results">No results found for "{{ search_query }}"</div>
+{% endif %}

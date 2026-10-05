@@ -3,6 +3,7 @@ from app.database.chroma_client import ChromaClient
 import json
 import os
 from collections import Counter
+from importlib.util import find_spec
 
 def init_routes(app):
     chroma_client = ChromaClient()
@@ -77,8 +78,9 @@ def init_routes(app):
             'total_journals': len(journal_counts)
         }
 
-    @app.route('/', methods=['GET', 'POST'])
-    def index():
+    def run_search():
+        """Run the search described by the submitted form, if there is one.
+        Returns the variables the search templates need."""
         search_query = ''
         results = None
         num_results = 50
@@ -101,56 +103,48 @@ def init_routes(app):
                 histogram_data = generate_year_histogram_data(results)
                 journal_data = generate_journal_histogram_data(results)
 
-        return render_template('index.html',
-                             search_query=search_query,
-                             results=results,
-                             num_results=num_results,
-                             search_type=search_type,
-                             histogram_data=histogram_data,
-                             journal_data=journal_data)
+        return dict(search_query=search_query,
+                    results=results,
+                    num_results=num_results,
+                    search_type=search_type,
+                    histogram_data=histogram_data,
+                    journal_data=journal_data)
+
+    @app.route('/', methods=['GET', 'POST'])
+    def index():
+        return render_template('index.html', **run_search())
 
     @app.route('/twopane', methods=['GET', 'POST'])
     def twopane():
-        search_query = ''
-        results = None
-        num_results = 50
-        search_type = "semantic"
-        histogram_data = None
-        journal_data = None
+        return render_template('twopane.html', **run_search())
 
-        if request.method == 'POST':
-            search_query = request.form.get('search_query', '')
-            num_results = int(request.form.get('num_results', 10))
-            search_type = request.form.get('search_type', "semantic")
-            
-            if search_query:
-                results = chroma_client.search_papers(
-                    search_query,
-                    num_results=num_results,
-                    search_type=search_type
-                )
-                # Generate histogram data
-                histogram_data = generate_year_histogram_data(results)
-                journal_data = generate_journal_histogram_data(results)
+    def load_journal_summary():
+        journal_summary_path = os.path.join('chroma_db', 'journal_summary.json')
+        with open(journal_summary_path, 'r') as f:
+            return json.load(f)
 
-        return render_template('twopane.html',
-                             search_query=search_query,
-                             results=results,
-                             num_results=num_results,
-                             search_type=search_type,
-                             histogram_data=histogram_data,
-                             journal_data=journal_data)
+    @app.route('/demo', methods=['GET', 'POST'])
+    def demo():
+        context = run_search()
+        # The demo page searches in place: it asks for just the results
+        if request.headers.get('X-Requested-With') == 'fetch':
+            return render_template('_results.html', demo=True, **context)
+        # About is part of the page, so that the demo never leaves it
+        return render_template('demo.html', demo=True,
+                               journal_summary=load_journal_summary(), **context)
 
     @app.route('/about')
     def about():
-        # Read the journal summary data
-        journal_summary_path = os.path.join('chroma_db', 'journal_summary.json')
-        with open(journal_summary_path, 'r') as f:
-            journal_summary = json.load(f)
-        
-        return render_template('about.html', journal_summary=journal_summary)
+        return render_template('about.html', journal_summary=load_journal_summary(),
+                               home_url=url_for('index'))
 
     @app.route('/paper/<paper_id>')
     def paper_detail(paper_id):
         paper = chroma_client.get_paper(paper_id)
-        return render_template('paper_detail.html', paper=paper) 
+        return render_template('paper_detail.html', paper=paper)
+
+    # The canvas prototype is kept out of the repository for now: its routes
+    # are only there on a machine that has the file
+    if find_spec('app.canvas_routes'):
+        from app.canvas_routes import init_canvas_routes
+        init_canvas_routes(app, chroma_client)

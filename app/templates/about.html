@@ -14,78 +14,9 @@
             This website works best on larger screens (desktop/laptop). Please rotate your device or use a larger screen for the best experience.
         </div>
         <div class="title-container">
-            <a href="{{ url_for('index') }}" class="return-link">← Return</a>
+            <a href="{{ home_url }}" class="return-link">← Return</a>
         </div>
-        <div class="about-content">
-            <h2><a href="{{ url_for('index') }}" class="title-link"><span class="emoji">🔮</span> VibeSearch</a></h2>
-            <p class="catchphrase">Great vibes only... unless you're researching bad vibes, that's cool too! 🌟</p>
-            
-            <p>VibeSearch is a vibe-y search engine for academic articles. It enables you to search using vector search, as well as as 'traditional' and keyword-based search. The idea is that it works only in some journals from the New Media field (list below). It's a prototype.</p>
-
-            <p> Vibe-coded by Gabriel Pereira. </p>
-        
-
-            <h3>Available Journals</h3>
-            <div class="journal-summary">
-                <table class="journal-table">
-                    <thead>
-                        <tr>
-                            <th>Journal</th>
-                            <th>Articles</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for issn, data in journal_summary.items() %}
-                        <tr>
-                            <td>{{ data.title | safe }}</td>
-                            <td>{{ data.article_count }}</td>
-                        </tr>
-                        {% endfor %}
-                        <tr class="total-row">
-                            <td>Total Articles</td>
-                            <td>{{ journal_summary.values() | sum(attribute='article_count') }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>Search Types</h3>
-            <div class="search-types">
-                <div class="search-type-item">
-                    <h4>🔮 Vibe Search (Semantic)</h4>
-                    <p>The mystic AI-powered search using <a href="https://www.trychroma.com/" target="_blank">ChromaDB</a> and the <a href="https://huggingface.co/Snowflake/snowflake-arctic-embed-s" target="_blank">Snowflake/snowflake-arctic-embed-s</a> model. It's like having a psychic librarian who understands the ~energy~ of your search. When you ask about "digital art communities", it'll find papers about "online creative collectives" because it gets the vibe, not just the words.</p>
-                </div>
-
-                <div class="search-type-item">
-                    <h4>📚 Traditional Search</h4>
-                    <p>The practical magic approach! It counts word matches but with a sprinkle of special sauce:</p>
-                    <ul>
-                        <li>Title matches get double points (because titles are important, duh!)</li>
-                        <li>Abstract matches get regular points</li>
-                        <li>If all your search words appear together? Bonus point! ✨</li>
-                    </ul>
-                    <p>Like a well-balanced crystal collection - not too woo-woo, not too rigid.</p>
-                </div>
-
-                <div class="search-type-item">
-                    <h4>🔍 Keyword Search</h4>
-                    <p>The "just the facts" option for when you're feeling no-nonsense. No AI magic, no special scoring - just straight-up word matching. Perfect for those Mercury-in-retrograde moments when you need things to be exactly what they say they are.</p>
-                </div>
-            </div>
-
-            <h3>Version 1.1 - Timelines and Journals</h3>
-            <div class="search-types">
-                <ul>
-                    <li><strong>📊 Timeline</strong>: Histogram showing publication years. Click bars to filter by year.</li>
-                    <li><strong>📝 Journals</strong>: Half-Doughnut chart showing top 10 journals. Click segments to filter by journal.</li>
-                </ul>
-            </div>
-
-            <h3>Inspiration</h3>
-            <div class="search-types">
-                <p>VibeSearch is inspired by Steve Jankowski's fantastic <a href="https://textaural.com/keywords/" target="_blank">Keywords for Studying Media, Culture & Information</a>.</p>
-            </div>
-        </div>
+        {% include '_about_content.html' %}
     </div>
 </body>
-</html> 
+</html>

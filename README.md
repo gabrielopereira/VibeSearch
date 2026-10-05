@@ -32,6 +32,16 @@ To run the application locally:
 python run.py
 ```
 
+While working on the code, run it with hot reload instead:
+```bash
+python run.py --dev
+```
+- Changes to CSS are applied to the open page without reloading it
+- Changes to templates and JavaScript reload the page (and repeat your last search)
+- Changes to Python files restart the server, then reload the page
+
+Add `--port 8081` to use another port, or `--host 0.0.0.0` to open it from another device on your network (e.g. an iPad).
+
 ### Hosting your own deployment (e.g. on DigitalOcean)
 
 The application can be deployed using the provided `deploy.sh` script:
@@ -39,6 +49,14 @@ The application can be deployed using the provided `deploy.sh` script:
 chmod +x deploy.sh
 ./deploy.sh
 ```
+
+## The Demo 🎪
+
+`/demo` is a guided version of the search page, made for an unattended screen at a stand (desktop or iPad). A crystal ball guide invites visitors to search, gives tips after their first search, and offers a walkthrough. The demo puts itself back in order when a visitor walks away, and links that lead out of it are switched off.
+
+- All its texts and timings are in `app/static/js/demo/content.js`
+- The walkthrough's screenshots are in `app/static/img/demo/`
+- The rest of the demo's code is in `app/static/js/demo/` and `app/static/css/demo.css`
 
 ## Search Types 🔎
 

@@ -1,0 +1,77 @@
+{# What the About page says. Shared by the About page itself and the demo
+   page, which opens it over the search page. #}
+{% from '_link.html' import outbound %}
+<div class="about-content">
+    <h2><a href="{{ home_url }}" class="title-link"><span class="emoji">🔮</span> VibeSearch</a></h2>
+    <p class="catchphrase">Great vibes only... unless you're researching bad vibes, that's cool too! 🌟</p>
+    
+    <p>VibeSearch is a custom-built curated search engine for academic articles. Our goal is to examine how a small AI model may be used to assist research according to the principles and values of education and scholarship.    </p>
+
+    <p>This prototype was created to help the students in the Media & Information BA and New Media and Digital Culture MA programs at the University of Amsterdam. It is built around an AI vector space of 41 journals, with a total of around 50 thousand articles.    </p>
+
+    <p>The project is now being developed in collaboration with the UvA AI Chat team, with the goal of allowing anyone across the university to curate and share lists of journals.    </p>
+
+    <p> A project by Gabriel Pereira, Steve Jankowski and Nina Boelsums. </p>
+
+
+    <h3>Available Journals</h3>
+    <div class="journal-summary">
+        <table class="journal-table">
+            <thead>
+                <tr>
+                    <th>Journal</th>
+                    <th>Articles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issn, data in journal_summary.items() %}
+                <tr>
+                    <td>{{ data.title | safe }}</td>
+                    <td>{{ data.article_count }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td>Total Articles</td>
+                    <td>{{ journal_summary.values() | sum(attribute='article_count') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Search Types</h3>
+    <div class="search-types">
+        <div class="search-type-item">
+            <h4>🔮 Vibe Search (Semantic)</h4>
+            <p>The mystic AI-powered search using <a {{ outbound('https://www.trychroma.com/', demo) }}>ChromaDB</a> and the <a {{ outbound('https://huggingface.co/Snowflake/snowflake-arctic-embed-s', demo) }}>Snowflake/snowflake-arctic-embed-s</a> model. It's like having a psychic librarian who understands the ~energy~ of your search. When you ask about "digital art communities", it'll find papers about "online creative collectives" because it gets the vibe, not just the words.</p>
+        </div>
+
+        <div class="search-type-item">
+            <h4>📚 Traditional Search</h4>
+            <p>The practical magic approach! It counts word matches but with a sprinkle of special sauce:</p>
+            <ul>
+                <li>Title matches get double points (because titles are important, duh!)</li>
+                <li>Abstract matches get regular points</li>
+                <li>If all your search words appear together? Bonus point! ✨</li>
+            </ul>
+            <p>Like a well-balanced crystal collection - not too woo-woo, not too rigid.</p>
+        </div>
+
+        <div class="search-type-item">
+            <h4>🔍 Keyword Search</h4>
+            <p>The "just the facts" option for when you're feeling no-nonsense. No AI magic, no special scoring - just straight-up word matching. Perfect for those Mercury-in-retrograde moments when you need things to be exactly what they say they are.</p>
+        </div>
+    </div>
+
+    <h3>Version 1.1 - Timelines and Journals</h3>
+    <div class="search-types">
+        <ul>
+            <li><strong>📊 Timeline</strong>: Histogram showing publication years. Click bars to filter by year.</li>
+            <li><strong>📝 Journals</strong>: Half-Doughnut chart showing top 10 journals. Click segments to filter by journal.</li>
+        </ul>
+    </div>
+
+    <h3>Inspiration</h3>
+    <div class="search-types">
+        <p>VibeSearch is inspired by Steve Jankowski's fantastic <a {{ outbound('https://textaural.com/keywords/', demo) }}>Keywords for Studying Media, Culture & Information</a>.</p>
+    </div>
+</div>

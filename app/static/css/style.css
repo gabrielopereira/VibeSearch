@@ -46,6 +46,7 @@
 
 .search-side {
     width: 100%;
+    box-sizing: border-box;
     overflow-y: auto;
     padding: 20px;
 }
@@ -425,15 +426,40 @@ h1 {
 
 .title-container {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    align-items: last baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    max-width: 732px;
     margin-bottom: 1rem;
+}
+
+.title-container h1 {
+    font-size: 2.1rem;
+    line-height: 1;
+    margin-bottom: 0;
+}
+
+.container.two-pane .title-container h1 {
+    font-size: 1.5rem;
+}
+
+.prototype-badge {
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: #666;
+    border-left: 2px solid #a7549f;
+    padding-left: 10px;
+}
+
+.prototype-badge strong {
+    color: #a7549f;
 }
 
 .about-link {
     color: #a7549f;
     text-decoration: none;
     font-size: 1rem;
+    margin-left: auto;
     transition: color 0.2s ease;
 }
 

@@ -5,3 +5,23 @@ oldvisualizationstuff/
 app/__pycache__/routes.cpython-311.pyc
 app/__pycache__/__init__.cpython-311.pyc
 app/database/__pycache__/chroma_client.cpython-311.pyc
+__pycache__/
+
+# macOS
+.DS_Store
+
+# Local tooling and scratch files
+.claude/
+ssh
+
+# Database copies kept around during a rebuild
+chroma_db_*/
+
+# Originals of the demo's screenshots (the cropped ones live in app/static/img/demo/)
+screenshotsfordemo/
+
+# The canvas prototype, not public yet
+canvas-frontend/
+app/canvas_routes.py
+app/templates/canvas.html
+app/static/canvas/

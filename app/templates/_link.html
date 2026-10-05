@@ -1,0 +1,5 @@
+{# The attributes of a link that leads away from the site. The demo runs on an
+   unattended screen, so there the link gets no address at all: nothing to
+   follow, even if the demo's scripts never load. static/js/demo/links.js tells
+   the visitor why nothing happened. #}
+{% macro outbound(url, demo) %}{% if demo %}data-outbound{% else %}href="{{ url }}" target="_blank"{% endif %}{% endmacro %}
