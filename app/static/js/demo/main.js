@@ -1,5 +1,6 @@
 // Entry point of the demo (/demo).
 import { initAbout } from './about.js';
+import { initArticle } from './article.js';
 import { RIBBON } from './content.js';
 import { initGuide } from './guide.js';
 import { initInPlaceSearch } from './inplace_search.js';
@@ -16,6 +17,7 @@ document.body.appendChild(ribbon);
 
 initGuide();
 initLinks();
+initArticle();
 initAbout();
 initInPlaceSearch();
 initTips();

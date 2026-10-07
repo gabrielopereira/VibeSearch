@@ -76,7 +76,8 @@ function build() {
 
 // ---------- Steps on the stage ----------
 
-function picture(item) {
+// A screenshot, framed as a little browser window (also used by article.js)
+export function picture(item) {
     const figure = element(`
         <figure class="walkthrough-picture">
             <div class="walkthrough-picture-bar"><i></i><i></i><i></i><span></span></div>

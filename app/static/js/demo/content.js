@@ -10,6 +10,7 @@ export const TIMING = {
     resetWarning: 10,     // countdown before starting over for the next person
     tipFor: 8,            // each tip stays this long, unless "Got it" is pressed first
     blockedLinkFor: 8,    // how long the "we're keeping you here" message stays
+    articleFor: 12,       // how long the look at an article stays, unless its button is pressed first
     beforeTyping: 2,      // walkthrough: pause on "Let's search for a topic…" before typing it
     afterTyping: 1.2,     // walkthrough: pause on the typed search before running it
 };
@@ -98,11 +99,22 @@ export const TIPS = {
 
 // Links are switched off on the demo, so that nobody leaves it
 export const BLOCKED_LINK = {
-    // A link in a search result (title, DOI, Libkey)
-    article: "You clicked on an article. Normally, you would be taken to it... but this is a demo, so we're keeping you here.",
-    // Any other link that leads away, e.g. on the About page
+    // Any link that leads away, e.g. on the About page
     other: "That link leads outside the demo, so we're keeping you here for now.",
     button: 'Got it',
+};
+
+// A link in a search result (title, DOI, Libkey) cannot open the article
+// either. The visitor gets a short look at what one is like instead:
+// `pictures` are files in static/img/demo/.
+export const ARTICLE = {
+    text: 'This would take you to the article, on a page like this one.',
+    then: "This is a demo, so I can't open yours, but this is what it looks like!",
+    pictures: [
+        { file: 'article-page.png', label: "The article on its journal's website" },
+        { file: 'article-pdf.png', label: 'The full text' },
+    ],
+    button: 'Back to the search',
 };
 
 // The walkthrough: a story told in steps, moved through with Next and Back.

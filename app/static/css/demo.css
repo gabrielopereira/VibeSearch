@@ -457,7 +457,8 @@
 
 /* ---------- The walkthrough: the stage ---------- */
 
-body.walkthrough-on-stage {
+body.walkthrough-on-stage,
+body.article-on-stage {
     overflow: hidden;  /* the page underneath stays put */
 }
 
@@ -474,6 +475,12 @@ body.walkthrough-on-stage {
 
 .walkthrough-stage[hidden] {
     display: none;
+}
+
+/* The look at an article (article.js) borrows the stage. It may come up in
+   the middle of the walkthrough, and then it covers the walkthrough's pill. */
+.article-stage {
+    z-index: 955;
 }
 
 .walkthrough-scene {

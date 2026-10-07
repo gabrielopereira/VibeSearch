@@ -1,9 +1,11 @@
 // Links that lead out of the demo are switched off: on an unattended screen,
-// nothing would bring the next visitor back. The guide explains instead.
+// nothing would bring the next visitor back. The guide explains instead, and
+// for an article it shows what one looks like (article.js).
 //
 // The server already leaves the address off these links on the demo
 // (templates/_link.html), so they go nowhere even without this file.
 
+import { showArticle } from './article.js';
 import { TIMING, BLOCKED_LINK } from './content.js';
 import * as guide from './guide.js';
 
@@ -28,8 +30,15 @@ function handleClick(event) {
     if (!link || (link.hasAttribute('href') && staysInDemo(link))) return;
     event.preventDefault();
 
+    // An article: show what one looks like instead
+    if (link.closest('.result-card')) {
+        dismiss();
+        showArticle();
+        return;
+    }
+
     guide.say(ID, {
-        text: link.closest('.result-card') ? BLOCKED_LINK.article : BLOCKED_LINK.other,
+        text: BLOCKED_LINK.other,
         actions: [{ label: BLOCKED_LINK.button, onClick: dismiss }],
     }, { anchor: link, arrow: true });
 
