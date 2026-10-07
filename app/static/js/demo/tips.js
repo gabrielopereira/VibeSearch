@@ -101,16 +101,19 @@ function tick() {
 export function initTips() {
     document.addEventListener('vibesearch:search-start', function (event) {
         if (event.detail.source === 'similar') given.add('similar');  // found it by themselves
-        pause();
+        // Stays where it is: the results may well bring the next tip
+        current = null;
+        guide.hush(ID);
     });
 
-    // The first tip arrives at the next tick, after a glance at the results
+    // The next tip comes with the results, and the guide goes straight to it
     document.addEventListener('vibesearch:results', function (event) {
         const words = event.detail.query.trim().split(/\s+/).length;
         wasShort = event.detail.source === 'search' && words <= TIPS.shortSearch;
         if (!event.detail.ok || !event.detail.count) return;
         current = nextTip();
         secondsShown = 0;
+        if (current && !aboutIsOpen() && !guide.speaker()) show();
     });
 
     document.addEventListener('click', function (event) {

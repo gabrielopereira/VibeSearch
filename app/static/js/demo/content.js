@@ -22,7 +22,7 @@ export const RIBBON = 'Demo version';
 export const START = {
     invitation: {
         title: 'Try me!',
-        text: "Type in what you're researching about new media and digital culture.",
+        text: "Type in something you want to research about new media and digital culture.",
     },
     // The way into the walkthrough
     offer: {
@@ -50,23 +50,23 @@ export const VALUES = {
     items: [
         {
             title: 'Small AI',
-            text: "My model is only 133 MB and runs on a tiny server. Good search doesn't need giants like ChatGPT.",
+            text: "My model is only 133 MB and runs on a tiny server. Good search doesn't need giant models like ChatGPT.",
         },
         {
             title: 'By scholars, for scholars',
-            text: 'The values of research guide my design, not the profit motives that drive Google.',
+            text: 'The values of scholarly research guide its design, not the profit motives that drive Google search.',
         },
         {
             title: 'Curation',
-            text: 'Not a warehouse of all research, but a library shelf that a community keeps for each other.',
+            text: 'Not a database of all research, but a way for scholarly communities to help each other search better. Some friction is good!',
         },
     ],
 };
 
 export const RESET = {
     title: 'Still there?',
-    text: "I'll start over for the next person in {seconds}…",  // {seconds} counts down
-    button: "I'm still here",
+    text: "If not, I'll start over for the next person in {seconds}…",  // {seconds} counts down
+    button: "I'm still here!",
 };
 
 // The tips that follow a visitor's first search, in this order
@@ -74,13 +74,13 @@ export const TIPS = {
     // Points at the first result's title
     results: {
         title: 'That was a vibe search!',
-        text: 'You just searched through abstracts in the vector space: I matched the meaning of your search, not the exact words.',
+        text: 'You just searched through articles in the vector space: I used the meaning of what you wrote, not the exact words.',
     },
     // Points at the search bar, and only after a search of very few words
     // (`shortSearch` words or fewer) that the visitor typed themselves
     longer: {
         title: 'Tell me more!',
-        text: 'I work better with a longer search… so type up some more? :)',
+        text: 'I work better with a longer search...',
     },
     shortSearch: 2,
     // Points at the first "Find Similar" button
@@ -91,7 +91,7 @@ export const TIPS = {
     // Points at the Timeline and Journals buttons
     charts: {
         title: 'There are more options up here',
-        text: 'See when this topic was researched, and in which journals.',
+        text: 'See when articles on this topic were published, and in which journals.',
     },
     button: 'Got it',
 };
@@ -99,7 +99,7 @@ export const TIPS = {
 // Links are switched off on the demo, so that nobody leaves it
 export const BLOCKED_LINK = {
     // A link in a search result (title, DOI, Libkey)
-    article: "You clicked on an article. Normally, you would be taken to it but this is a demo, so we're keeping you here for now.",
+    article: "You clicked on an article. Normally, you would be taken to it... but this is a demo, so we're keeping you here.",
     // Any other link that leads away, e.g. on the About page
     other: "That link leads outside the demo, so we're keeping you here for now.",
     button: 'Got it',
@@ -114,6 +114,7 @@ export const BLOCKED_LINK = {
 //   'similar'   points at the first Find Similar button
 //   'timeline'  opens the Timeline chart and points at it
 //   'journals'  opens the Journals chart and points at it
+//   'about'     opens the About page at its list of journals
 //   'examples'  the ending: offers the `examples` as searches to tap
 // The steps after 'search' need its results, so keep them after it.
 export const WALKTHROUGH = {
@@ -128,54 +129,58 @@ export const WALKTHROUGH = {
     steps: [
         {
             show: 'stage',
-            text: "Let's imagine you're a BA student in Media Studies researching queer personal data privacy. How do you do research?",
+            text: "Let's imagine you're a BA student in Media Studies. You want to research the challenges queer people face in safeguarding their personal data. How do you do research on this?",
         },
         {
             show: 'stage',
-            text: 'You could go to Google Scholar…',
+            text: 'You could go to Google Scholar, for example…',
             pictures: [{ file: 'google-scholar.png', label: 'Google Scholar' }],
-            then: "But the results aren't very good… It shows many articles that are not from your field, for example from Law or Marketing…",
+            then: "But the results aren't very good… It shows many articles that are not from Media Studies, but from Law, Computer Science, and even Marketing…",
         },
         {
             show: 'stage',
-            text: 'You could also search it on the University Library or on a specific journal…',
+            text: 'You could also search this on the University Library or on a specific journal…',
             pictures: [
                 { file: 'uva-catalogue.png', label: 'University Library' },
                 { file: 'sage-journal.png', label: 'A journal' },
             ],
-            then: "But the results are also scattered across disciplines, and don't get your vibe…",
+            then: "But the results are scattered across disciplines, and they don't really get your vibe…",
         },
         {
             show: 'hero',
             title: 'Here comes VibeSearch!',
-            text: "It's a search engine created based on curation by people in the research community.",
+            text: "I'm a curated, AI-based search engine for academic articles.",
         },
         {
             show: 'stage',
-            text: "It uses Small AI to do vector search, so it's based on the ‘meaning’ of your search query, not the actual words you use.",
-            then: 'This means you can describe your topic in your own words, and still find the articles that are about it.',
+            text: "I use a small AI model to do ‘vector search’. This means I search based on the ‘meaning’ of your search query, not the actual words you use.",
+            then: 'You can describe your topic in your own words, and I’ll help find helpful articles about it.',
         },
         {
             show: 'search',
-            typing: "Let's search for a topic, for example…",
-            text: 'Oh wow, the results are great, and really helpful for your research!',
+            typing: "Let's search for your topic, for example by typing…",
+            text: 'Oh wow, those results are great and really helpful for your research!',
         },
         {
             show: 'similar',
-            text: 'Found an article you like? ✨ Find Similar looks for the ones closest to it.',
+            text: 'If you find an article you like, you can click on ✨ Find Similar to search for articles close to it.',
         },
         {
             show: 'timeline',
-            text: '📊 Timeline shows when this topic was researched. Tap a bar to see only that year.',
+            text: 'The 📊 Timeline tab shows when articles on this topic were published. Tap a bar to see only that year.',
         },
         {
             show: 'journals',
-            text: '📝 Journals shows which journals publish about it. Tap a slice to see only that journal.',
+            text: 'The 📝 Journals tab shows which journals published articles on your query. Tap a slice to see only publications in that journal.',
+        },
+        {
+            show: 'about',
+            text: "One more thing: I am a curated search engine. This means I search within a selection of journals selected by scholars in your field. This prototype includes only journals that are useful for New Media and Digital Culture students like you! In the future, people will be able to curate and share lists for other fields!",
         },
         {
             show: 'examples',
-            text: 'Okay, now that you got how this works, you can try typing in your own search query. This prototype was created for students of New Media and Digital Culture, so think of something like:',
-            footnote: 'Have fun doing your search!',
+            text: 'Okay, now that you got how this works, you can try typing in your own search query. As this prototype was created for students of New Media and Digital Culture, think of something like...',
+            footnote: 'Have fun with your research!',
             done: "I'll type my own",
         },
     ],

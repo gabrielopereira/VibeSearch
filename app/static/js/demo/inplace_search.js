@@ -10,6 +10,7 @@
 const FAILED_MESSAGE = '<div class="no-results">That search did not go through. Please try again.</div>';
 
 let latestSearch = 0;
+let searching = false;  // a search is on its way
 
 function announce(name, detail) {
     document.dispatchEvent(new CustomEvent(name, { detail }));
@@ -21,6 +22,7 @@ export async function runSearch(fields, source) {
     const query = fields.search_query;
 
     setSearching(true);
+    searching = true;
     announce('vibesearch:search-start', { query, source });
 
     let html = FAILED_MESSAGE;
@@ -48,6 +50,7 @@ export async function runSearch(fields, source) {
     document.getElementById('search-type').value = fields.search_type;
 
     setSearching(false);
+    searching = false;
     initResults();
     window.scrollTo(0, 0);
 
@@ -64,30 +67,18 @@ function searchForm() {
     return document.querySelector('.search-form');
 }
 
-// True while the search bar and its options are as they were when the page opened
-function formIsUntouched() {
-    return Array.from(searchForm().elements).every(function (field) {
-        if (field.options) {
-            return Array.from(field.options).every(function (option) {
-                return option.selected === option.defaultSelected;
-            });
-        }
-        // Buttons have no default value, and nothing a visitor can change
-        return field.defaultValue === undefined || field.value === field.defaultValue;
-    });
-}
-
-// Nothing searched, nothing typed: the page as a new visitor should find it
-export function searchIsPristine() {
-    return formIsUntouched() && document.getElementById('results-region').childElementCount === 0;
-}
-
 // Back to the pristine page
 export function clearSearch() {
     latestSearch++;  // abandon a search that is still on its way
     searchForm().reset();
     document.getElementById('results-region').replaceChildren();
     setSearching(false);
+    searching = false;
+}
+
+// Between a search being sent and its results being on the page
+export function isSearching() {
+    return searching;
 }
 
 export function initInPlaceSearch() {

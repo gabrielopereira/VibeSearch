@@ -10,7 +10,7 @@ export function aboutIsOpen() {
     return !panel.hidden;
 }
 
-function openAbout() {
+export function openAbout() {
     if (document.activeElement) document.activeElement.blur();  // puts the on-screen keyboard away
     guide.rest();  // whatever was being said was about the page underneath
     panel.hidden = false;

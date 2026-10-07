@@ -9,6 +9,7 @@ import { aboutIsOpen } from './about.js';
 import { TIMING, START, POKE, VALUES } from './content.js';
 import * as guide from './guide.js';
 import { secondsIdle, onActivity } from './idle.js';
+import { isSearching } from './inplace_search.js';
 import { startWalkthrough } from './walkthrough.js';
 
 const ID = 'smalltalk';
@@ -76,7 +77,8 @@ function atStart(idle, speaking) {
 
 function inCorner(idle, speaking) {
     if (idle < TIMING.valuesAfter) {
-        if (speaking) guide.rest(ID);
+        // Also when it waited by the search bar for results and no tip followed
+        guide.rest();
         changedAt = null;
         return;
     }
@@ -88,6 +90,7 @@ function inCorner(idle, speaking) {
 // Once a second: see whether it is time to say something else
 function tick() {
     if (document.body.classList.contains('walkthrough-running')) return;
+    if (isSearching()) return;                  // waiting for the results, in silence
     const speaker = guide.speaker();
     if (speaker && speaker !== ID) return;      // something that matters more is being said
     if (performance.now() < holdUntil) return;  // an answer to a tap is still up
@@ -109,11 +112,13 @@ function answer() {
     holdUntil = performance.now() + TIMING.valueFor * 1000;
 }
 
+// A search is on its way: wait for it on the spot. If the results bring a
+// tip, the guide goes straight there; if not, off to its corner (see tick).
 function goQuiet() {
     holdUntil = 0;
     changedAt = null;
     showing = null;
-    guide.rest(ID);
+    guide.hush(ID);
 }
 
 export function initSmalltalk() {
@@ -131,6 +136,8 @@ export function initSmalltalk() {
         if (onStartScreen() && guide.speaker() === ID && showing !== 'invitation') showInvitation();
     });
     document.addEventListener('vibesearch:search-start', goQuiet);
+    // The tips get the first word on the results (main.js sets them up first)
+    document.addEventListener('vibesearch:results', tick);
 
     // Back from the walkthrough: straight to its place under the search bar
     document.addEventListener('demo:walkthrough-end', function () {

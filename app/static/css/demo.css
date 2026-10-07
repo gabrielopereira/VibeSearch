@@ -12,8 +12,9 @@
     --look-y: 0;
 }
 
+/* How long and how a flight goes depends on how far it is: see flyTo() in guide.js */
 .guide--flying {
-    transition: transform 0.7s cubic-bezier(0.34, 1.3, 0.64, 1);
+    transition: transform var(--flight-ms, 700ms) var(--flight-ease, ease-out);
 }
 
 .guide-ball {
@@ -133,7 +134,7 @@
 
 .guide--arrow .guide-arrow {
     opacity: 1;
-    transition-delay: 0.45s;  /* once the ball has landed */
+    transition-delay: calc(var(--landing, 0.4s) + 0.05s);  /* once the ball has landed */
 }
 
 @keyframes guide-point {
@@ -189,7 +190,8 @@
     opacity: 1;
     transform: scale(1);
     pointer-events: auto;
-    transition: opacity 0.25s 0.4s, transform 0.25s 0.4s;  /* once the ball has landed */
+    /* once the ball has landed */
+    transition: opacity 0.25s var(--landing, 0.4s), transform 0.25s var(--landing, 0.4s);
 }
 
 .guide[data-bubble="right"] .guide-bubble {
@@ -301,6 +303,23 @@
 .guide--perched .guide-arrow {
     opacity: 0;
     pointer-events: none;
+    transition: none;
+}
+
+/* Waiting in silence where it is, e.g. for the results of a search */
+.guide--hushed .guide-bubble,
+.guide--hushed .guide-offer,
+.guide--hushed .guide-arrow {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+}
+
+/* Setting off for somewhere else: the words go at once, and come back on landing */
+.guide--takeoff .guide-bubble,
+.guide--takeoff .guide-offer,
+.guide--takeoff .guide-arrow {
+    opacity: 0;
     transition: none;
 }
 
@@ -536,7 +555,7 @@ body.walkthrough-on-stage {
 
 /* The second thought arrives a moment after the first */
 .walkthrough-scene--enter .walkthrough-then {
-    animation: walkthrough-rise 0.5s 1.4s both;
+    animation: walkthrough-rise 0.5s 0.6s both;
 }
 
 /* The screenshots, framed as little browser windows. They take all the
@@ -870,6 +889,16 @@ body.about-open {
 
 .demo-about .return-link:hover {
     background: #8a437f;
+}
+
+/* The walkthrough's stop here: the list of journals, a little below the top
+   of the screen, and the guide's Next and Back as the only way on */
+.demo-about #available-journals {
+    scroll-margin-top: 24px;
+}
+
+body.walkthrough-about .demo-about .return-link {
+    display: none;
 }
 
 /* ---------- Less motion for those who ask for it ---------- */

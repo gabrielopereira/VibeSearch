@@ -5,16 +5,16 @@ import { TIMING, RESET } from './content.js';
 import { aboutIsOpen, closeAbout } from './about.js';
 import * as guide from './guide.js';
 import { whileIdle, onActivity } from './idle.js';
-import { clearSearch, searchIsPristine } from './inplace_search.js';
+import { clearSearch } from './inplace_search.js';
 
 const ID = 'reset';
 
 let countdown = null;
 let used = false;  // somebody has touched the demo since it last started over
 
-// Nothing on screen that the next visitor would find out of place
-function looksUntouched() {
-    return !aboutIsOpen() && searchIsPristine() && window.scrollY === 0
+// The start screen: no results, nothing open. At most a few typed words.
+function onStartScreen() {
+    return !aboutIsOpen() && document.getElementById('results-region').childElementCount === 0
         && !document.body.classList.contains('walkthrough-running');
 }
 
@@ -36,10 +36,10 @@ function countdownText(seconds) {
 
 function startCountdown() {
     if (!used || countdown) return;
-    // Nothing on screen to lose, so no need to ask. The demo still has to
-    // forget the last visitor: the tips they were given, the keyboard they
-    // left open.
-    if (looksUntouched()) {
+    // Nothing on screen worth asking about. The demo still has to forget the
+    // last visitor: the tips they were given, the words or the keyboard they
+    // left behind.
+    if (onStartScreen()) {
         resetDemo();
         return;
     }

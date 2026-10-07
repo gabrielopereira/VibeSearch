@@ -3,6 +3,7 @@
 // and the guide carries on over the live page. The story itself is in
 // content.js.
 
+import { openAbout, closeAbout } from './about.js';
 import { TIMING, WALKTHROUGH } from './content.js';
 import * as guide from './guide.js';
 import { runSearch, clearSearch } from './inplace_search.js';
@@ -203,6 +204,14 @@ const LIVE = {
         showChart(step, 'journal-container', toggleJournal);
     },
 
+    // About covers the page, so the guide speaks from its corner and leaves
+    // the list of journals free to be scrolled through
+    about: function (step) {
+        openAbout();
+        document.getElementById('available-journals').scrollIntoView();
+        say(step.text, function () { return {}; });
+    },
+
     examples: function (step) {
         say(step.text, underSearchBar, {
             choices: WALKTHROUGH.examples.map(function (query) {
@@ -223,6 +232,11 @@ function show() {
     pill.querySelector('.walkthrough-progress').textContent = WALKTHROUGH.progress
         .replace('{step}', index + 1)
         .replace('{total}', STEPS.length);
+
+    // During its own step About is left with Next and Back, not with Return
+    const about = step.show === 'about';
+    if (!about) closeAbout();
+    document.body.classList.toggle('walkthrough-about', about);
 
     const live = LIVE[step.show];
     if (!live) {
@@ -264,7 +278,7 @@ function exit() {
     repeat = null;
     leaveStage();
     pill.hidden = true;
-    document.body.classList.remove('walkthrough-running');
+    document.body.classList.remove('walkthrough-running', 'walkthrough-about');
     guide.rest(ID);
     document.dispatchEvent(new CustomEvent('demo:walkthrough-end'));
 }

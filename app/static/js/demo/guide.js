@@ -6,6 +6,8 @@
 //   updateText(id, text)     change the words, e.g. for a countdown
 //   perch(id, element, big)  sit on an element without a bubble, for when
 //                            the words are shown some other way
+//   hush(id)                 stop talking but stay put, for a short wait
+//                            that ends with something else being said
 //   rest(id)                 stop talking and go back to the corner
 //
 // message: { eyebrow, title, text, choices, footnote, actions, wide, offer }
@@ -36,7 +38,12 @@ const ARROW_HEIGHT = 70;  // room the arrow takes between the anchor and the bal
 const BUBBLE_GAP = 14;    // between the ball and its bubble
 const BUBBLE_DROP = 6;    // how far below the ball's top its bubble starts; matches demo.css
 const NARROWEST_BUBBLE = 240;  // the bubble is squeezed no further than this
-const FLIGHT_MS = 700;    // how long a flight takes; matches .guide--flying in demo.css
+const HOP_MS = 700;       // how long a short flight takes, with a little bounce at the end
+const HOP_EASE = 'cubic-bezier(0.34, 1.3, 0.64, 1)';
+const HOP_REACH = 320;    // px; anything further is a glide: slower, and easing in as well as out
+const GLIDE_MS = [800, 1200];  // the shortest and the longest glide
+const GLIDE_EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
+const BUBBLE_LEAD = 300;  // the words start to appear this long before the ball lands
 
 const BALL_SVG = `
 <svg viewBox="0 0 120 132" aria-hidden="true">
@@ -81,9 +88,10 @@ const ARROW_SVG = `
 
 let root, ball, bubble, eyebrowElement, titleElement, textElement, choicesElement, footnoteElement, actionsElement;
 let offer, offerTitleElement, offerTextElement, offerActionsElement;
-let current = null;  // { id, pose } while speaking, null while resting
+let current = null;  // { id, pose } while speaking (id: null while hushed), null while resting
 let highlighted = null;  // the element wearing the outline
 let landsAt = 0;         // when the flight in progress ends
+let at = { x: 0, y: 0 };  // where the ball is, or is flying to
 
 function build() {
     if (root) return;
@@ -147,8 +155,24 @@ function setHighlight(element) {
 }
 
 function flyTo() {
-    landsAt = performance.now() + FLIGHT_MS;
+    const from = at;
     place(true);
+    const distance = Math.hypot(at.x - from.x, at.y - from.y);
+    const moving = distance > 8;
+    const ms = distance <= HOP_REACH
+        ? HOP_MS
+        : Math.round(Math.min(Math.max(500 + distance * 0.7, GLIDE_MS[0]), GLIDE_MS[1]));
+    root.style.setProperty('--flight-ms', ms + 'ms');
+    root.style.setProperty('--flight-ease', distance <= HOP_REACH ? HOP_EASE : GLIDE_EASE);
+    root.style.setProperty('--landing', (moving ? ms - BUBBLE_LEAD : 0) + 'ms');
+    // The words wait for the landing: they are hidden at once, not carried
+    // across the screen half faded
+    if (moving) {
+        root.classList.add('guide--takeoff');
+        void root.offsetWidth;
+        root.classList.remove('guide--takeoff');
+    }
+    landsAt = performance.now() + ms;
 }
 
 // The x, on screen, of the spot on the anchor that the pose points at
@@ -221,7 +245,8 @@ function place(fly) {
 
     root.classList.toggle('guide--above', above);
     root.classList.toggle('guide--flying', fly);
-    root.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    at = { x: Math.round(x), y: Math.round(y) };
+    root.style.transform = `translate(${at.x}px, ${at.y}px)`;
 }
 
 // Without an arrow to look along, the eyes turn to the bubble
@@ -270,7 +295,7 @@ export function say(id, message, pose = {}) {
     offerTextElement.textContent = message.offer ? message.offer.text : '';
     offerActionsElement.replaceChildren(...makeActions(message.offer && message.offer.actions));
     root.classList.toggle('guide--wide', !!message.wide);
-    root.classList.remove('guide--perched', 'guide--big');
+    root.classList.remove('guide--perched', 'guide--big', 'guide--hushed');
 
     const bubbleSide = pose.bubble || roomierSide(pose);
     root.dataset.bubble = bubbleSide;
@@ -294,12 +319,24 @@ export function perch(id, element, big) {
     current = { id, pose: { perch: element } };
     offer.hidden = true;
     setHighlight(null);
-    root.classList.remove('guide--arrow', 'guide--anchored', 'guide--above');
+    root.classList.remove('guide--arrow', 'guide--anchored', 'guide--above', 'guide--hushed');
     root.classList.add('guide--speaking', 'guide--perched');
     root.classList.toggle('guide--big', !!big);
     root.style.setProperty('--look-x', big ? 0 : 1);  // towards the words beside it
     root.style.setProperty('--look-y', 0);
     if (moved) flyTo(); else place(false);
+}
+
+// Stop talking, but stay where it is: for a wait that is about to end with
+// something else being said, e.g. for the results of a search. Flying to the
+// corner and straight back would be a detour. Nobody is the speaker
+// meanwhile, and if nothing follows, a rest() without an id sends it home.
+export function hush(id) {
+    build();
+    if (!current || !current.id || (id && current.id !== id)) return;
+    current = { id: null, pose: current.pose };
+    setHighlight(null);
+    root.classList.add('guide--hushed');
 }
 
 // Without an id: stop whoever is talking
@@ -308,7 +345,7 @@ export function rest(id) {
     if (!current || (id && current.id !== id)) return;
     current = null;
     setHighlight(null);
-    root.classList.remove('guide--speaking', 'guide--arrow', 'guide--anchored', 'guide--perched', 'guide--big');
+    root.classList.remove('guide--speaking', 'guide--arrow', 'guide--anchored', 'guide--perched', 'guide--big', 'guide--hushed');
     root.style.setProperty('--look-x', 0);
     root.style.setProperty('--look-y', 0);
     flyTo();
